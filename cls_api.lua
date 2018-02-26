@@ -43,11 +43,11 @@ function api.new_player(player_obj, controllable)
     p.velocity  = player_obj.linear_velocity
     p.direction = player_obj.orientation[1]
     p.has_ball  = player_obj.has_ball
+    p.stats     = player_obj.stats
+    p.team      = api.new_team(player_obj.team)
 
      -- @TODO
-    p.stats = nil
     p.is_contesting_ball = nil
-    p.team = api.new_team(player_obj.team)
 
     api.keys[p] = player_obj
 
@@ -109,43 +109,34 @@ function api.new_team(team_obj)
     return t
 end
 
-local time = {}
-time.__index = time
-
-function api.new_time(time_obj)
+function api.new_time(time_obj) -- @TODO
     local t = {}
-    setmetatable(t, time)
 
-     -- @TODO
+    t.elapsed_seconds   = nil
+    t.half              = nil
+    t.seconds_remaining = nil
+    t.is_extra_time     = nil
 
     return t
 end
 
-function time:getSecondsElapsed() -- number
-end
-
-function time:getHalf() -- number (1 or 2)
-end
-
-function time:getSecondsRemaining() -- number
-end
-
-function time:isExtraTime() -- boolean
-end
-
-function api.new_goal(goal_obj)
+function api.new_goal(goal_obj) -- @TODO
     local g = {}
-    g.team = nil
+
+    g.team   = nil
     g.scorer = nil
-    g.time = nil
+    g.time   = nil
+    O
     return g
 end
 
-function api.new_score(score_obj)
+function api.new_score(score_obj) -- @TODO
     local s = {}
+
     s.home_score = nil
     s.away_score = nil
-    s.goals = nil
+    s.goals      = nil
+
     return s
 end
 
@@ -186,7 +177,7 @@ end
 
 This looks like a good post on sandboxing:
 https://stackoverflow.com/questions/1224708/how-can-i-create-a-secure-lua-sandbox
-
+http://lua-users.org/wiki/SandBoxes
 
 ]]
 
