@@ -31,7 +31,7 @@ function Pitch.new()
     self.penalty_distance     = 11 
     self.penalty_area_radius  = 9.14
 
-    self.spot_radius = 1
+    self.spot_radius = 0.3
 
 
     return self
@@ -61,7 +61,9 @@ function Pitch:isInGoal(position)
     
 end
 
-function Pitch:draw(rotation)
+function Pitch:draw(x, y, rotation, scale)
+    love.graphics.push()
+    love.graphics.translate(x, y)
     love.graphics.rotate(rotation or 0)
 
     local ox = -self.pitch_width / 2
@@ -69,58 +71,64 @@ function Pitch:draw(rotation)
     
     -- Pitch boundaries
     love.graphics.setColor(self.background_colour)
-    love.graphics.rectangle("fill", ox, oy, self.pitch_width, self.pitch_length)
+    love.graphics.rectangle("fill", 
+        ox * scale, oy * scale, 
+        self.pitch_width * scale, self.pitch_length * scale)
     love.graphics.setColor(self.line_colour)
-    love.graphics.rectangle("line", ox, oy, self.pitch_width, self.pitch_length)
+    love.graphics.rectangle("line", 
+        ox * scale, oy * scale, 
+        self.pitch_width * scale, self.pitch_length * scale)
 
     -- Centre circle
-    love.graphics.circle("line", 0, 0, self.middle_circle_radius)
-    love.graphics.circle("fill", 0, 0, self.spot_radius)
-    love.graphics.line(ox, 0, ox + self.pitch_width, 0)
+    love.graphics.circle("line", 0, 0, self.middle_circle_radius * scale)
+    love.graphics.circle("fill", 0, 0, self.spot_radius * scale)
+    love.graphics.line(ox * scale, 0, 
+        (ox + self.pitch_width) * scale, 0)
 
     -- Corner arcs
     love.graphics.arc("line", 
-        ox, oy, 
-        self.corner_radius, 0, PI / 2)
+        ox * scale, oy * scale, 
+        self.corner_radius * scale, 0, PI / 2)
     love.graphics.arc("line", 
-        ox + self.pitch_width, oy, 
-        self.corner_radius, PI / 2, PI)
+        (ox + self.pitch_width) * scale, oy * scale,
+        self.corner_radius * scale, PI / 2, PI)
     love.graphics.arc("line", 
-        ox + self.pitch_width, oy + self.pitch_length, 
-        self.corner_radius, PI, 3 * PI / 2)
+        (ox + self.pitch_width) * scale, (oy + self.pitch_length) * scale, 
+        self.corner_radius * scale, PI, 3 * PI / 2)
     love.graphics.arc("line", 
-        ox, oy + self.pitch_length, 
-        self.corner_radius, 3 * PI / 2, 2 * PI)
+        ox * scale, (oy + self.pitch_length) * scale, 
+        self.corner_radius * scale, 3 * PI / 2, 2 * PI)
 
     -- Penalty areas
     local r = math.acos((self.penalty_area_length - self.penalty_distance) / self.penalty_area_radius)
     love.graphics.rectangle("line", 
-        -self.penalty_area_width / 2, oy, 
-        self.penalty_area_width, self.penalty_area_length)
+        (-self.penalty_area_width / 2) * scale, oy * scale, 
+        self.penalty_area_width * scale, self.penalty_area_length * scale)
     love.graphics.arc("line", "open",
-        0, oy + self.penalty_distance, 
-        self.penalty_area_radius, math.pi / 2 - r, math.pi / 2 + r)
+        0, (oy + self.penalty_distance) * scale, 
+        self.penalty_area_radius * scale, math.pi / 2 - r, math.pi / 2 + r)
     love.graphics.circle("fill", 
-        0, oy + self.penalty_distance, 
-        self.spot_radius)
+        0, (oy + self.penalty_distance) * scale, 
+        self.spot_radius * scale)
     
     love.graphics.rectangle("line", 
-        -self.penalty_area_width / 2, oy + self.pitch_length - self.penalty_area_length, 
-        self.penalty_area_width, self.penalty_area_length)
+        (-self.penalty_area_width / 2) * scale, (oy + self.pitch_length - self.penalty_area_length) * scale, 
+        self.penalty_area_width * scale, self.penalty_area_length * scale)
     love.graphics.arc("line", "open",
-        0, oy + self.pitch_length - self.penalty_distance, 
-        self.penalty_area_radius, -math.pi / 2 - r, -math.pi / 2 + r)
+        0, (oy + self.pitch_length - self.penalty_distance) * scale, 
+        self.penalty_area_radius * scale, -math.pi / 2 - r, -math.pi / 2 + r)
     love.graphics.circle("fill", 
-        0, oy + self.pitch_length - self.penalty_distance, 
-        self.spot_radius)
+        0, (oy + self.pitch_length - self.penalty_distance) * scale, 
+        self.spot_radius * scale)
 
     -- Six-yard boxes
     love.graphics.rectangle("line", 
-        -self.six_yard_box_width / 2, oy, 
-        self.six_yard_box_width, self.six_yard_box_length)
+        (-self.six_yard_box_width / 2) * scale, oy * scale, 
+        self.six_yard_box_width * scale, self.six_yard_box_length * scale)
     love.graphics.rectangle("line", 
-        -self.six_yard_box_width / 2, oy + self.pitch_length - self.six_yard_box_length, 
-        self.six_yard_box_width, self.six_yard_box_length)
+        (-self.six_yard_box_width / 2) * scale, (oy + self.pitch_length - self.six_yard_box_length) * scale, 
+        self.six_yard_box_width * scale, self.six_yard_box_length * scale)
+    love.graphics.pop()
 end
 
 return Pitch
