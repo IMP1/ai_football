@@ -16,10 +16,11 @@ local POSITIONS = {
     "LF",  "LCF",  "CF",  "RCF",  "RF",
 }
 
-function Player.new(name, number, ai, team)
+function Player.new(team, name, number, ai)
     local self = Object.new(0, 0, 0)
     setmetatable(self, Player)
 
+    self.team = team
     self.name = name
     self.number = number
     self.ai = ai
@@ -27,10 +28,28 @@ function Player.new(name, number, ai, team)
         speed = 5, -- m/s
         turn_speed = nil, -- r/s?
     }
-    self.team = team
+
+    -- In-Game properties
     self.has_the_ball = false
 
     return self
+end
+
+function Player:dump()
+    local str = "{\n"
+
+    str = str .. string.format("\tname   = \"%s\",\n", self.name)
+    str = str .. string.format("\tnumber = \"%s\",\n", self.number)
+    str = str .. string.format("\tai     = \"ai_%s_%s.lua\",\n", self.ai.author, self.ai.name)
+    str = str .. "\tstats  = {\n"
+
+    for stat, value in pairs(self.stats) do
+        str = str .. string.format("\t\t%s = %s,\n", stat, value)
+    end
+
+    str = str .. "\t},\n"
+
+    return str .. "}\n"
 end
 
 function Player:moveTowards(position)
@@ -55,7 +74,6 @@ function Player:shout(command, recipient)
             end
         end
     end
-    -- @TODO: copy from scn_game. recipient is optional and if ommitted will be to whole team.
 end
 
 function Player:update(dt, game)
@@ -70,7 +88,7 @@ end
 
 function Player:draw()
     local x, y = unpack(self.position.data)
-    love.graphics.setColor(self.team.colour)
+    love.graphics.setColor(self.team.home_colour)
     love.graphics.circle("fill", x, y, 1)
     love.graphics.printf(self.name, x - 32, y, 64, "center")
 end
