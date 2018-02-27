@@ -1,13 +1,13 @@
 local Team = {}
 Team.__index = Team
 
-function Team.new(name, colour, manager)
+function Team.new(name, manager, home_colour)
     local self = {}
     setmetatable(self, Team)
 
     self.name    = name
-    self.colour  = colour
     self.manager = manager or {}
+    self.home_colour  = home_colour
     self.ais = {}
     for _, filename in pairs(love.filesystem.getDirectoryItems(".")) do
         if filename:match("ai_%w+_%w+.lua") then
@@ -20,12 +20,13 @@ function Team.new(name, colour, manager)
             end
         end
     end
-    self.starting_players = {
-        -- @TODO: get from team management
-        (require 'cls_player').new("A", 1, self.ais["test"], self),
-        (require 'cls_player').new("B", 2, self.ais["test"], self),
-        (require 'cls_player').new("C", 3, self.ais["test"], self),
-    }
+    self.available_players = {
+        (require 'cls_player').new(self, "A", 1, self.ais["test"]),
+        (require 'cls_player').new(self, "B", 2, self.ais["test"]),
+        (require 'cls_player').new(self, "C", 3, self.ais["test"]),
+    } -- @TODO: get from team management
+    self.starting_players = {} -- @TODO: get from team management
+    for _, player in pairs(self.available_players) do table.insert(self.starting_players, player) end
     self.interrupts = {
         -- @TODO: get from team management
         "Press",
