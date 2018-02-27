@@ -672,7 +672,9 @@ end
 
 function Group:addElement(element)
     table.insert(self.elements, element)
-    self:layout():refreshStyles()
+    if self:layout() then
+        self:layout():refreshStyles()
+    end
 end
 
 function Group:removeElement(element)
@@ -683,7 +685,9 @@ function Group:removeElement(element)
             return
         end
     end
-    self:layout():refreshStyles()
+    if self:layout() then
+        self:layout():refreshStyles()
+    end
 end
 
 function Group:removeElements(selector)

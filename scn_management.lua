@@ -45,7 +45,15 @@ function Management:load()
         },
     })
 
-    -- @TODO: add list of players
+    local player_list = bricks.group({32, 128, 128, 544}, {})
+    for i, player in ipairs(self.team.available_players) do
+        local player_elem = bricks.group({4, i * 32, "100", 32}, {
+            bricks.text(tostring(player.number)),
+            bricks.text(player.name),
+        })
+        print(player.number, player.name)
+        player_list:addElement(player_elem)
+    end
 
     self.layout = bricks.layout({
         title,
