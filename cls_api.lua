@@ -39,6 +39,7 @@ function api.new_player(player_obj, controllable)
     end
 
     p.name      = player_obj.name
+    p.number    = player_obj.number
     p.position  = player_obj.position
     p.velocity  = player_obj.linear_velocity
     p.direction = player_obj.orientation[1]
@@ -59,12 +60,23 @@ function this_player:shout(command)
 end
 
 function this_player:kick(direction, force, curve)
-    api.game_object.ball:applyForce(direction:normalise() * force)
+    if (api.keys[self].has_ball) then
+    -- if (api.game_object.ball.position - self.position):magnitudeSquared() < 1 then
+        -- @TODO: use curve
+        api.game_object.ball:applyForce(direction:normalise() * force)
+        print(self.name, self.team.name, "kicks the ball.")
+        api.game_object:changeBallOwnership(nil)
+    end
 end
 
 function this_player:moveTowards(position)
     local player_obj = api.keys[self]
     player_obj:moveTowards(position)
+end
+
+function this_player:challengeForBall()
+    local player_obj = api.keys[self]
+    api.game_object:challengeForBall(player_obj)
 end
 
 function this_player:dribble(direction, speed)
