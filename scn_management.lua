@@ -14,7 +14,8 @@ local bricks = require 'lib_bricks'
 
 local Scene = require 'scn_base'
 
-local Pitch = require 'cls_pitch'
+local Pitch  = require 'cls_pitch'
+local Player = require 'cls_player'
 
 local Management = {}
 setmetatable(Management, Scene)
@@ -45,18 +46,64 @@ function Management:load()
         },
     })
 
-    local player_list = bricks.group({32, 128, 128, 544}, {})
+    local bg_colour = {[0] = DEFAULT_THEME.stripe1, [1] = DEFAULT_THEME.stripe2}
+    local player_list = bricks.group({32, 96, 320, 416}, {
+        style = {
+            backgroundColor = DEFAULT_THEME.background,
+            borderRadius = {4, 4},
+            borderColor = self.team.home_colour,
+        },
+    }, {
+        bricks.text({0, 0, 32, "100"}, {
+            text = "#",
+            style = {
+                textColor = {colour.textColour(DEFAULT_THEME.background)},
+            },
+        }),
+        bricks.text({24, 0, 64, "100"}, {
+            text = "Pos",
+            style = {
+                textColor = {colour.textColour(DEFAULT_THEME.background)},
+            },
+        }),
+        bricks.text({64, 0, 128, "100"}, {
+            text = "Name",
+            style = {
+                textColor = {colour.textColour(DEFAULT_THEME.background)},
+            },
+        }),
+    })
     for i, player in ipairs(self.team.available_players) do
-        local player_elem = bricks.group({4, i * 32, "100", 32}, {
-            bricks.text(tostring(player.number)),
-            bricks.text(player.name),
+        local player_elem = bricks.group({0, 24 + (i-1) * 24, "100", 24}, {
+                style = {
+                    backgroundColor = bg_colour[i % 2],
+                },
+            }, {
+            bricks.text({0, 0, 32, "100"}, {
+                text = tostring(player.number),
+                style = {
+                    textColor = {colour.textColour(bg_colour[i % 2])},
+                },
+            }),
+            bricks.text({24, 0, 64, "100"}, {
+                text = Player.POSITIONS[player.game_position_index],
+                style = {
+                    textColor = {colour.textColour(bg_colour[i % 2])},
+                },
+            }),
+            bricks.text({64, 0, 128, "100"}, {
+                text = player.name,
+                style = {
+                    textColor = {colour.textColour(bg_colour[i % 2])},
+                },
+            }),
         })
-        print(player.number, player.name)
         player_list:addElement(player_elem)
     end
 
     self.layout = bricks.layout({
         title,
+        player_list,
     })
 end    
 
