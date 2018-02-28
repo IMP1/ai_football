@@ -11,7 +11,7 @@ function Pitch.new()
 
     self.gravity        = 9.81
     self.bounce         = 0.5
-    self.friction       = 0.3
+    self.friction       = 0.5
     self.air_resistance = 0.1
 
     self.background_colour = {64, 192, 64}
