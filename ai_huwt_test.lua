@@ -32,7 +32,7 @@ function ai.tick(self, game)
         local goal_pos = vec3(0, dir * game.pitch.dimensions.pitch_size[1], 0)
         local direction = goal_pos - self.position
         direction.z = direction:magnitude() / 2
-        self:kick(direction, 1, 0)
+        self:kick(direction, 10, 0)
     else
         local ball_pos = game.ball.position
         self:moveTowards(ball_pos)
