@@ -7,9 +7,11 @@ DEFAULT_THEME = { -- @TODO: have more than one theme?
     void       = {0, 0, 0}, 
     background = {224, 224, 255},
     border     = {128, 128, 128},
+    stripe1    = {192, 192, 255},
+    stripe2    = {192, 192, 192},
 }
 
-local INITIAL_SCENE_CLASS = require 'scn_management'
+local INITIAL_SCENE_CLASS = require 'scn_game'
 local SceneManager = require 'scn_scn_manager'
 
 -- global requires
