@@ -119,7 +119,7 @@ function Element.new(elementName, id, pos, options)
     obj._name = elementName
 
     obj.id      = id
-    obj.pos     = pos or {"0", "0", "100", "100", "top", "left"}
+    obj.pos     = pos or {"0", "0", "100", "100", "left", "top"}
     obj.tags    = options.tags or {}
     obj.hover   = false
     obj.focus   = false
@@ -146,7 +146,9 @@ function Element:load()
     -- end
     -- setmetatable(self.style, {__index = default_style.common})
     -- load style from style declarations
-    self:layout():refreshStyles()
+    if self:layout() then
+        self:layout():refreshStyles()
+    end
 
     -- load children
     if self.elements then
@@ -672,6 +674,7 @@ end
 
 function Group:addElement(element)
     table.insert(self.elements, element)
+    element.parent = self
     if self:layout() then
         self:layout():refreshStyles()
     end
@@ -1413,7 +1416,7 @@ function Text:setText(text)
     elseif type(text) == "function" then
         self.text = text
     else
-        error("[Mortar] Invalid text value: '" .. tostring(text) .. "' for Text.")
+        error("[Bricks] Invalid text value: '" .. tostring(text) .. "' for Text.")
     end
 end
 
@@ -1617,7 +1620,7 @@ function TextInput:drawContent(w, h)
 end
 
 --------------------------------------------------------------------------------
--- # Mortar.Graphics (Internal)
+-- # Bricks.Graphics (Internal)
 --------------
 -- This holds a stack of graphical parameters (font, colour, backgroundColour, 
 -- line style, etc.). This stack can be pushed to and popped from to isolate
@@ -1698,7 +1701,7 @@ local function default_constructor_for(ObjectClass)
         elseif #params == 0 then
             return ObjectClass.new(nil, nil, {})
         else
-            local errorString = "[Mortar] Invalid parameters:\n"
+            local errorString = "[Bricks] Invalid parameters:\n"
             errorString = errorString .. "Attempted to create a " .. tostring(ObjectClass)
             errorString = errorString .. " with " .. tostring(#params) .. " parameters\n"
             for k, v in pairs(params) do
@@ -1740,7 +1743,7 @@ local function default_group_constructor_for(ObjectClass)
         elseif #params == 0 then
             return ObjectClass.new(nil, nil, {})
         else
-            local errorString = "[Mortar] Invalid parameters:\n"
+            local errorString = "[Bricks] Invalid parameters:\n"
             errorString = errorString .. "Attempted to create a " .. tostring(ObjectClass)
             errorString = errorString .. " with " .. tostring(#params) .. "parameters\n"
             for k, v in pairs(params) do
@@ -1774,7 +1777,7 @@ local function special_text_constructor()
         elseif #params == 0 then
             return ObjectClass.new(nil, nil, {})
         else
-            local errorString = "[Mortar] Invalid parameters:\n"
+            local errorString = "[Bricks] Invalid parameters:\n"
             errorString = errorString .. "Attempted to create a " .. tostring(ObjectClass)
             errorString = errorString .. " with " .. tostring(#params) .. " parameters\n"
             for k, v in pairs(params) do
