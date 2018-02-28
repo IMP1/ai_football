@@ -9,9 +9,10 @@ function Pitch.new()
 
     self.name = name or ""
 
-    self.gravity  = 9.81
-    self.bounce   = 0.5
-    self.friction = 0.5
+    self.gravity        = 9.81
+    self.bounce         = 0.5
+    self.friction       = 0.3
+    self.air_resistance = 0.1
 
     self.background_colour = {64, 192, 64}
     self.line_colour       = {192, 255, 192}
@@ -58,7 +59,18 @@ function Pitch:isInPenaltyArea(position)
 end
 
 function Pitch:isInGoal(position)
-    
+    if self:isInPitch(position) then 
+        return false 
+    end
+    local x, y, z = unpack(position.data)
+    if math.abs(x) >= self.goal_width then
+        return false
+    end
+    if z >= self.goal_height then
+        return false 
+    end
+    return true
+    -- @TODO, return as second argument which goal it is?
 end
 
 function Pitch:draw(x, y, rotation, scale)
