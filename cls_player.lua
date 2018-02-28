@@ -81,12 +81,6 @@ end
 
 function Player:update(dt, game)
     Object.update(self, dt)
-    if not self.has_the_ball and game:nearestPlayerTo(game.ball.position) then
-        local ball_pos = game.ball.position
-        if (ball_pos - self.position):magnitudeSquared() < 1 then
-            game:changeBallOwnership(self)
-        end
-    end
 end
 
 function Player:draw(ox, oy, rotation, scale)
