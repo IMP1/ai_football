@@ -1,3 +1,5 @@
+local colour = require 'util_colour'
+
 local Vector = require 'lib_vec3'
 local Vec3 = Vector.new
 
@@ -7,7 +9,7 @@ local Player = {}
 setmetatable(Player, Object)
 Player.__index = Player
 
-local POSITIONS = {
+Player.POSITIONS = {
     "GK", 
     "LB",  "LCB",  "CB",  "RCB",  "RB",
     "LDM", "LCDM", "CDM", "RCDM", "RDM",
@@ -28,6 +30,7 @@ function Player.new(team, name, number, ai)
         speed = 5, -- m/s
         turn_speed = nil, -- r/s?
     }
+    self.game_position_index = 1
 
     -- In-Game properties
     self.has_the_ball = false
@@ -86,11 +89,14 @@ function Player:update(dt, game)
     end
 end
 
-function Player:draw()
-    local x, y = unpack(self.position.data)
+function Player:draw(ox, oy, rotation, scale)
+    -- @TODO: take offset (ox and oy) into account
+
+    local x, y, z = unpack(self.position:rotate(0, 0, -rotation).data)
     love.graphics.setColor(self.team.home_colour)
-    love.graphics.circle("fill", x, y, 1)
-    love.graphics.printf(self.name, x - 32, y, 64, "center")
+    love.graphics.circle("fill", x * scale, y * scale, 1 * scale)
+    love.graphics.setColor(colour.textColour(self.team.home_colour))
+    love.graphics.printf(self.number, x * scale - 32, y * scale - 6, 64, "center")
 end
 
 return Player
