@@ -105,10 +105,21 @@ function Game:nearestPlayerTo(position)
     return nearest_player
 end
 
+function Game:challengeForBall(player)
+    self:changeBallOwnership(player)
+end
+
 function Game:changeBallOwnership(player)
+    if player then
+        print(player.name, player.team.name, "now has the ball.")
+    else
+        print("nobody now has the ball.")
+    end
     -- @QUESTION: Should this just blindly accept this from any player?
     -- It should only be called from within game logic, and not from AI.
-    player.has_ball = true
+    if player then
+        player.has_ball = true
+    end
     if self.player_with_ball then
         self.player_with_ball.has_ball = false
     end
@@ -116,6 +127,7 @@ function Game:changeBallOwnership(player)
 end
 
 function Game:interrupt(interrupt_index, team)
+    if not team.interrupts[interrupt_index] then return end
     if self.interrupt_player and self.interrupt_player.team == team then
         print("Shouting '" .. team.interrupts[interrupt_index] .. "' at " .. self.interrupt_player.name)
         self.interrupt_player:interrupt(interrupt_index)
