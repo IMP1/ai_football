@@ -7,13 +7,13 @@ local i = 0
 function ai.start_position(self, game)
     local dir = -self.team.attacking_direction
     i = i + 1
-    if i == 1 then
+    if self.number == 1 then
         return vec3(4, dir * 10, 0), {1, 0, 0, 1}
-    elseif i == 2 then
+    elseif self.number == 2 then
         return vec3(-4, dir * 16, 0), {1, 0, 0, 1}
-    elseif i == 3 then
+    elseif self.number == 3 then
         return vec3(0, dir * 40, 0), {1, 0, 0, 1}
-    elseif i == 4 then
+    elseif self.number == 4 then
         return vec3(16, dir * 20, 0), {1, 0, 0, 1}
     elseif i == 5 then
         return vec3(-16, dir * 20, 0), {1, 0, 0, 1}
@@ -35,7 +35,11 @@ function ai.tick(self, game)
         self:kick(direction, 10, 0)
     else
         local ball_pos = game.ball.position
-        self:moveTowards(ball_pos)
+        if (ball_pos - self.position):magnitudeSquared() < 1 then
+            self:challengeForBall()
+        else
+            self:moveTowards(ball_pos)
+        end
     end
 end
 
