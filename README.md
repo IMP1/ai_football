@@ -23,8 +23,8 @@ with me the most.
 
 It's name is horrendously silly, and I love it. FIFAI is a portmanteau of FIFA,
 the [International Federation of Football](https://en.wikipedia.org/wiki/FIFA), 
-and AI. It's a portmanteau of acronyms, which made my come up with another two
-portmanteaus: portmantonym and acromanteau. And Faux-Fun is a description of the
+and AI. It's a portmanteau of acronyms, which made me come up with another two
+portmanteaus: portmantonym or acromanteau. And Faux-Fun is a description of the
 idea, really, as you're just watching your creation work (or not), rather than
 playing the game yourself. And together it (almost) makes the poem of the giant
 from Jack and the Beanstalk: [Fe Fi Fo Fum](https://en.wikipedia.org/wiki/Fee-fi-fo-fum).
