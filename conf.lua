@@ -1,3 +1,3 @@
 function love.conf(game)
-    game.window.title = "FIFAI Faux-Fun"
+    game.window.title = "FIFAI: Faux-Fun"
 end
