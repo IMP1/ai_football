@@ -139,6 +139,10 @@ function Game:update(dt)
         player:update(dt, self)
     end
     self.ball:update(dt, self)
+    if self.pitch:isInGoal(self.ball.position) then
+        print("GOAL GOALGOALGOAL!")
+        self:load()
+    end
 end
 
 function Game:tick()
@@ -151,21 +155,24 @@ function Game:draw()
     local w = love.graphics.getWidth()
     local h = love.graphics.getHeight()
     self.camera:set()
+    self.pitch:draw(0, 0, math.pi / 2, 7)
     love.graphics.push()
+    love.graphics.rotate(math.pi / 2)
     love.graphics.scale(7)
-    self.pitch:draw(math.pi / 2)
     for i, team in pairs(self.teams) do
-        love.graphics.setColor(team.colour)
+        love.graphics.setColor(team.home_colour)
         local y = self.pitch.pitch_width * ((i-1)*2-1) / 3
         love.graphics.line(y-4, -10 * self.directions[i], y, 10 * self.directions[i])
         love.graphics.line(y+4, -10 * self.directions[i], y, 10 * self.directions[i])
     end
-    for _, player in pairs(self.players) do
-        player:draw(math.pi / 2)
-    end
-    self.ball:draw(math.pi / 2)
     love.graphics.pop()
+    for _, player in pairs(self.players) do
+        player:draw(0, 0, math.pi / 2, 7)
+    end
+    self.ball:draw(0, 0, math.pi / 2, 7)
     self.camera:unset()
+
+    love.graphics.print(tostring(self.ball.position), 0, 0)
 end
 
 return Game
