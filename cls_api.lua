@@ -126,7 +126,7 @@ function api.new_goal(goal_obj) -- @TODO
     g.team   = nil
     g.scorer = nil
     g.time   = nil
-    O
+    
     return g
 end
 
