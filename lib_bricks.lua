@@ -1,5 +1,5 @@
 local bricks = {
-    _VERSION     = 'v0.0.1',
+    _VERSION     = 'v0.0.2',
     _DESCRIPTION = 'A Lua UI library for LÖVE games',
     _URL         = '',
     _LICENSE     = [[
@@ -7,23 +7,24 @@ local bricks = {
 
         Copyright (c) 2017 Huw Taylor
 
-        Permission is hereby granted, free of charge, to any person obtaining a copy
-        of this software and associated documentation files (the "Software"), to deal
-        in the Software without restriction, including without limitation the rights
-        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-        copies of the Software, and to permit persons to whom the Software is
-        furnished to do so, subject to the following conditions:
+        Permission is hereby granted, free of charge, to any person obtaining a 
+        copy of this software and associated documentation files (the 
+        "Software"), to deal in the Software without restriction, including 
+        without limitation the rights to use, copy, modify, merge, publish, 
+        distribute, sublicense, and/or sell copies of the Software, and to 
+        permit persons to whom the Software is furnished to do so, subject to 
+        the following conditions:
 
-        The above copyright notice and this permission notice shall be included in all
-        copies or substantial portions of the Software.
+        The above copyright notice and this permission notice shall be included 
+        in all copies or substantial portions of the Software.
 
-        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-        SOFTWARE.
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS 
+        OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+        MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. 
+        IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY 
+        CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, 
+        TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
+        SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     ]]
 }
 
@@ -124,6 +125,7 @@ function Element.new(elementName, id, pos, options)
     obj.hover   = false
     obj.focus   = false
     obj.style   = options.style or {}
+    obj.data    = {}
     obj.loaded  = false
     obj.onload  = options.onload or nil
     obj.visible = options.visible
@@ -496,7 +498,8 @@ function Element:drawShape(x, y, w, h)
     local drawBackground = true
     if not self.valid and self.style.backgroundColorInvalid then
         bricks.graphics.setColor(unpack(self.style.backgroundColorInvalid))
-    elseif self.isActive and self:isActive() and self.style.backgroundColorActive then
+    elseif self.isActive and self:isActive() and 
+           self.style.backgroundColorActive then
         bricks.graphics.setColor(unpack(self.style.backgroundColorActive))
     elseif self.focus and self.style.backgroundColorFocus then
         bricks.graphics.setColor(unpack(self.style.backgroundColorFocus))
@@ -513,7 +516,8 @@ function Element:drawShape(x, y, w, h)
     local drawBorder = true
     if not self.valid and self.style.borderColorInvalid then
         bricks.graphics.setColor(unpack(self.style.borderColorInvalid))
-    elseif self.isActive and self:isActive() and self.style.borderColorActive then
+    elseif self.isActive and self:isActive() and 
+           self.style.borderColorActive then
         bricks.graphics.setColor(unpack(self.style.borderColorActive))
     elseif self.focus and self.style.borderColorFocus then
         bricks.graphics.setColor(unpack(self.style.borderColorFocus))
@@ -567,6 +571,9 @@ function Group:mousereleased(mx, my, key)
 end
 
 function Group:update(dt, mx, my)
+    if not mx or not my then
+        mx, my = love.mouse.getPosition()
+    end
     for _, e in pairs(self.elements) do
         if e.update then
             e:update(dt, mx, my)
@@ -1326,7 +1333,8 @@ end
 
 -- Lua Coroutines: https://www.lua.org/pil/9.1.html
 -- Async Coroutines?: http://leafo.net/posts/itchio-and-coroutines.html
--- Non-blocking `select` on a lua socket? And then periodically check for completion and fire a callback? Not sure if this is possible...
+-- Non-blocking `select` on a lua socket? And then periodically check for 
+-- completion and fire a callback? Not sure if this is possible...
 
 local Spinner = {}
 setmetatable(Spinner, { __index = Element})
@@ -1356,7 +1364,9 @@ function Spinner:update(dt)
     for i, pip in pairs(self.spin.pips) do
         local distance    = self.spin.position - (i-1)
         if distance < 0 then distance = distance + #self.spin.pips end
-        local opacity     = math.max(0, math.min(255, 255 * distance / #self.spin.pips))
+        local opacity     = math.max(0, 
+                            math.min(255, 
+                            255 * distance / #self.spin.pips))
         self.spin.pips[i] = opacity
     end
     if self.spin.position >= #self.spin.pips then
@@ -1416,7 +1426,7 @@ function Text:setText(text)
     elseif type(text) == "function" then
         self.text = text
     else
-        error("[Bricks] Invalid text value: '" .. tostring(text) .. "' for Text.")
+        error("[Bricks] Invalid text value: '" .. tostring(text) .. "'.")
     end
 end
 
@@ -1466,8 +1476,8 @@ function TextInput.new(id, position, options)
     this.pattern        = options.pattern or nil
     local initialText   = {}
     if options.text then
-        options.text:gsub(".",function(c) 
-            table.insert(initialText,c) 
+        options.text:gsub(".", function(c) 
+            table.insert(initialText, c) 
         end)
     end
     this.text           = initialText
@@ -1701,9 +1711,9 @@ local function default_constructor_for(ObjectClass)
         elseif #params == 0 then
             return ObjectClass.new(nil, nil, {})
         else
-            local errorString = "[Bricks] Invalid parameters:\n"
-            errorString = errorString .. "Attempted to create a " .. tostring(ObjectClass)
-            errorString = errorString .. " with " .. tostring(#params) .. " parameters\n"
+            local errorString = "[Bricks] Invalid parameters:\n" .. 
+                "Attempted to create a " .. tostring(ObjectClass) .. " with " .. 
+                tostring(#params) .. " parameters\n" 
             for k, v in pairs(params) do
                 errorString = errorString .. "\t" .. tostring(v) .. ",\n"
             end
@@ -1721,7 +1731,9 @@ local function default_group_constructor_for(ObjectClass)
             return ObjectClass.new(unpack(params))
         elseif #params == 3 and type(params[1]) == "string" then
             if params[2][1] then -- location
-                return ObjectClass.new(params[1], params[2], {elements = params[3]})
+                return ObjectClass.new(params[1], params[2], {
+                    elements = params[3]
+                })
             else
                 params[2].elements = params[3]
                 return ObjectClass.new(params[1], nil, params[2])
@@ -1743,9 +1755,9 @@ local function default_group_constructor_for(ObjectClass)
         elseif #params == 0 then
             return ObjectClass.new(nil, nil, {})
         else
-            local errorString = "[Bricks] Invalid parameters:\n"
-            errorString = errorString .. "Attempted to create a " .. tostring(ObjectClass)
-            errorString = errorString .. " with " .. tostring(#params) .. "parameters\n"
+            local errorString = "[Bricks] Invalid parameters:\n" .. 
+                "Attempted to create a " .. tostring(ObjectClass) .. " with " .. 
+                tostring(#params) .. "parameters\n"
             for k, v in pairs(params) do
                 errorString = errorString .. "\t" .. v .. ",\n"
             end
@@ -1777,9 +1789,9 @@ local function special_text_constructor()
         elseif #params == 0 then
             return ObjectClass.new(nil, nil, {})
         else
-            local errorString = "[Bricks] Invalid parameters:\n"
-            errorString = errorString .. "Attempted to create a " .. tostring(ObjectClass)
-            errorString = errorString .. " with " .. tostring(#params) .. " parameters\n"
+            local errorString = "[Bricks] Invalid parameters:\n" .. 
+                "Attempted to create a " .. tostring(ObjectClass) .. " with " ..
+                tostring(#params) .. " parameters\n"
             for k, v in pairs(params) do
                 errorString = errorString .. "\t" .. tostring(v) .. ",\n"
             end
@@ -1824,7 +1836,7 @@ bricks._functions = {
 }
 
 --------------------------------------------------------------------------------
--- # Mortar.Style
+-- # Bricks.Style
 --------------
 -- 
 --------------------------------------------------------------------------------
