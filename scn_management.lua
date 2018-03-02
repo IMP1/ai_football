@@ -1,17 +1,6 @@
 local colour = require 'util_colour'
 local bricks = require 'lib_bricks'
 
--- local group           = bricks.group
--- local text            = bricks.text
--- local checkbox        = bricks.checkbox
--- local spinner         = bricks.spinner
--- local button          = bricks.button
--- local text_input      = bricks.text_input
--- local radio_group     = bricks.radio_group
--- local radio_option    = bricks.radio_option
--- local dropdown_group  = bricks.dropdown_group
--- local dropdown_option = bricks.dropdown_option
-
 local Scene = require 'scn_base'
 
 local Pitch  = require 'cls_pitch'
@@ -32,79 +21,10 @@ function Management.new(team)
 end
 
 function Management:load()
-    local cx, cy = love.graphics.getWidth() / 2, love.graphics.getHeight() / 2
-
-    local w = FONTS.game_title:getWidth(self.team.name)
-    local title = bricks.text({cx - w / 2 - 32, 16, w + 64, FONTS.game_title:getHeight() + 32, "center"}, {
-        text = self.team.name,
-        tags = {"title"},
-        style = {
-            font = FONTS.game_title,
-            backgroundColor = self.team.home_colour,
-            borderRadius = {12, 12},
-            padding = {16, 16, 16, 16}
-        },
-    })
-
-    local bg_colour = {[0] = DEFAULT_THEME.stripe1, [1] = DEFAULT_THEME.stripe2}
-    local player_list = bricks.group({32, 96, 320, 416}, {
-        style = {
-            backgroundColor = DEFAULT_THEME.background,
-            borderRadius = {4, 4},
-            borderColor = self.team.home_colour,
-        },
-    }, {
-        bricks.text({0, 0, 32, "100"}, {
-            text = "#",
-            style = {
-                textColor = {colour.textColour(DEFAULT_THEME.background)},
-            },
-        }),
-        bricks.text({24, 0, 64, "100"}, {
-            text = "Pos",
-            style = {
-                textColor = {colour.textColour(DEFAULT_THEME.background)},
-            },
-        }),
-        bricks.text({64, 0, 128, "100"}, {
-            text = "Name",
-            style = {
-                textColor = {colour.textColour(DEFAULT_THEME.background)},
-            },
-        }),
-    })
-    for i, player in ipairs(self.team.available_players) do
-        local player_elem = bricks.group({0, 24 + (i-1) * 24, "100", 24}, {
-                style = {
-                    backgroundColor = bg_colour[i % 2],
-                },
-            }, {
-            bricks.text({0, 0, 32, "100"}, {
-                text = tostring(player.number),
-                style = {
-                    textColor = {colour.textColour(bg_colour[i % 2])},
-                },
-            }),
-            bricks.text({24, 0, 64, "100"}, {
-                text = Player.POSITIONS[player.game_position_index],
-                style = {
-                    textColor = {colour.textColour(bg_colour[i % 2])},
-                },
-            }),
-            bricks.text({64, 0, 128, "100"}, {
-                text = player.name,
-                style = {
-                    textColor = {colour.textColour(bg_colour[i % 2])},
-                },
-            }),
-        })
-        player_list:addElement(player_elem)
-    end
-
-    self.layout = bricks.layout({
-        title,
-        player_list,
-    })
+    self.layouts = {
+        require('ui_manage_tactics')(self.team),
+    }
+    self.current_layout_index = 1
 end    
 
 function Management:keypressed(key)
@@ -119,7 +39,7 @@ function Management:draw()
     -- love.graphics.setColor(DEFAULT_THEME.border)
     -- love.graphics.rectangle("line", 16, 16, w - 32, h - 32, 8, 8)
 
-    self.layout:draw()
+    self.layouts[self.current_layout_index]:draw()
 
     -- self:drawTitle()
     self:drawPitch()
