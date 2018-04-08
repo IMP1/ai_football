@@ -45,7 +45,7 @@ function SceneManager.keypressed(key, is_repeat)
     end
     for _, scene in pairs(scene_stack) do
         if scene and scene.backgroundKeypressed then
-            scene:backgroundKeyPressed()
+            scene:backgroundKeyPressed(key, is_repeat)
         end
     end
 end
@@ -56,7 +56,7 @@ function SceneManager.textinput(text)
     end
     for _, scene in pairs(scene_stack) do
         if scene and scene.backgroundKeyTyped then
-            scene:backgroundKeyTyped()
+            scene:backgroundKeyTyped(text)
         end
     end
 end
@@ -67,7 +67,7 @@ function SceneManager.mousepressed(mx, my, key)
     end
     for _, scene in pairs(scene_stack) do
         if scene and scene.backgroundMousePressed then
-            scene:backgroundMousePressed()
+            scene:backgroundMousePressed(mx, my, key)
         end
     end
 end
@@ -78,7 +78,18 @@ function SceneManager.mousereleased(mx, my, key)
     end
     for _, scene in pairs(scene_stack) do
         if scene and scene.backgroundMouseReleased then
-            scene:backgroundMouseReleased()
+            scene:backgroundMouseReleased(mx, my, key)
+        end
+    end
+end
+
+function SceneManager.mousescrolled(mx, my, dx, dy)
+    if current_scene and current_scene.mouseScrolled then
+        current_scene:mouseScrolled(mx, my, dxm, dy)
+    end
+    for _, scene in pairs(scene_stack) do
+        if scene and scene.backgroundMouseScrolled then
+            scene:backgroundMouseScrolled(mx, my, dxm, dy)
         end
     end
 end
@@ -90,7 +101,7 @@ function SceneManager.update(dt)
     end
     for _, scene in pairs(scene_stack) do
         if scene and scene.backgroundUpdate then
-            scene:backgroundUpdate()
+            scene:backgroundUpdate(dt, mx, my)
         end
     end
 end
