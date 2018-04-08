@@ -22,8 +22,8 @@ function Team.new(name, manager, home_colour)
     end
     self.available_players = {
         (require 'cls_player').new(self, "A", 1, self.ais["test"]),
-        (require 'cls_player').new(self, "B", 2, self.ais["test"]),
-        (require 'cls_player').new(self, "C", 3, self.ais["test"]),
+        (require 'cls_player').new(self, "B", 2, self.ais["idle"]),
+        (require 'cls_player').new(self, "C", 3, self.ais["idle"]),
     } -- @TODO: get from team management
     self.starting_players = {} -- @TODO: get from team management
     for _, player in pairs(self.available_players) do table.insert(self.starting_players, player) end
