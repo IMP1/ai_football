@@ -1,6 +1,6 @@
-# FIFAI Faux-Fun
+# FIFAI: Faux-Fun
 
-FIFAI Faux-Fun is a football management game, where you control how the players
+FIFAI: Faux-Fun is a football management game, where you control how the players
 behave.
 
 Programme your players' behaviour using the lua programming language, and watch
@@ -18,7 +18,7 @@ can find the relevant bits for the AI API to be in the `cls_api.lua` file.
 
 I came across a game called [Screeps](https://screeps.com) and I thought it was 
 a fantastic idea. My mind immediately started coming up with ideas for games 
-that used user-coded AI in a similar way. FIFAI Faux-Fun was the idea that stuck
+that used user-coded AI in a similar way. FIFAI: Faux-Fun was the idea that stuck
 with me the most.
 
 It's name is horrendously silly, and I love it. FIFAI is a portmanteau of FIFA,
@@ -33,3 +33,10 @@ from Jack and the Beanstalk: [Fe Fi Fo Fum](https://en.wikipedia.org/wiki/Fee-fi
 
 I'm not very good at making things look good, but when I do, this is where I 
 will show it off to the world.
+
+## Credits
+
+**Graphics/Fonts**
+
+  * PT Sans Web
+
