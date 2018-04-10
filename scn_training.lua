@@ -1,5 +1,7 @@
 local gui_manager = require 'lib_gui_manager'
 local List = require 'lib_gui_scroll_list'
+local Button = require 'lib_gui_button'
+local Text = require 'lib_gui_text'
 
 local Scene = require 'scn_base'
 
@@ -21,11 +23,24 @@ function Training:load()
     local team_list = {}
     -- @TODO: load list of teams
 
+    local cx, cy = love.graphics.getWidth() / 2, love.graphics.getHeight() / 2
+    local w = 192
+    table.insert(root, Button.new({
+        position = {cx - w/2, 128},
+        size     = {192, 32},
+        text     = T"Create New Team",
+    }))
+    table.insert(root, Text.new({
+        position = {cx - w/2, 224},
+        size     = {192, 32},
+        text     = T"My Teams",
+    }))
     table.insert(root, List.new({
-        position = {256, 256},
-        size     = {128, 128},
+        position = {cx - w/2, 256},
+        size     = {192, 128},
         items    = team_list,
     }))
+
 
     gui_manager.register('team_list', root)
     gui_manager.open('team_list')
@@ -40,7 +55,7 @@ function Training:mouseScrolled(mx, my, dx, dy)
 end
 
 function Training:draw()
-    love.graphics.setColor(255, 255, 255)
+    love.graphics.setColor(1, 1, 1)
     gui_manager.draw()
 end
 
