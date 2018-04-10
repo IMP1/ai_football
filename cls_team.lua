@@ -9,20 +9,22 @@ function Team.new(name, manager, home_colour)
     self.manager = manager or {}
     self.home_colour  = home_colour
     self.ais = {}
-    for _, filename in pairs(love.filesystem.getDirectoryItems(".")) do
-        if filename:match("ai_%w+_%w+.lua") then
+    for _, filename in pairs(love.filesystem.getDirectoryItems("")) do 
+        -- @TODO: the filepath used to be '.' but this no longer works. An empty filepath seems to do the trick
+        --        but bare this in mind.
+        if filename:match("ai_%w+_[%w_]+.lua") then
             local i = filename:find("_", 4)
             local j = filename:find("%.")
             local author_name = filename:sub(4, i-1)
             local ai_name = filename:sub(i+1, j-1)
-            if author_name == self.manager.username or "huwt" then
+            if author_name == self.manager.username or author_name == "huwt" then -- @TODO: remove this hack
                 self.ais[ai_name] = love.filesystem.load(filename)()
             end
         end
     end
     self.available_players = {
-        (require 'cls_player').new(self, "A", 1, self.ais["test"]),
-        (require 'cls_player').new(self, "B", 2, self.ais["idle"]),
+        (require 'cls_player').new(self, "A", 1, self.ais["test_gk"]),
+        (require 'cls_player').new(self, "B", 2, self.ais["test"]),
         (require 'cls_player').new(self, "C", 3, self.ais["idle"]),
     } -- @TODO: get from team management
     self.starting_players = {} -- @TODO: get from team management
