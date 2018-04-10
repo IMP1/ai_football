@@ -10,14 +10,17 @@ FONTS = {
 }
 DEFAULT_THEME = { -- @TODO: have more than one theme?
     void       = {0, 0, 0}, 
-    background = {224, 224, 255},
-    border     = {128, 128, 128},
-    stripe1    = {192, 192, 255},
-    stripe2    = {192, 192, 192},
+    background = {0.875, 0.875, 1},
+    border     = {0.5, 0.5, 0.5},
+    stripe1    = {0.75, 0.75, 1},
+    stripe2    = {0.75, 0.75, 0.75},
 }
 
 local INITIAL_SCENE_CLASS = require 'scn_title'
 local scene_manager = require 'scn_scn_manager'
+local gui_element   = require 'lib_gui_element'
+
+gui_element.DEFAULT_STYLE.font = FONTS.game_text
 
 -- global requires
 local Vector3 = require 'lib_vec3'
@@ -29,9 +32,7 @@ function love.load()
     love.graphics.setFont(FONTS.game_title)
     love.graphics.setBackgroundColor(DEFAULT_THEME.void)
 
-    local team1 = require 'cls_team'.new("Ridge Rovers United FC", nil, {0, 96, 255})
-    local team2 = require 'cls_team'.new("Firelight United", nil, {255, 0, 0})
-    scene_manager.setScene(INITIAL_SCENE_CLASS.new(team1, team2))
+    scene_manager.setScene(INITIAL_SCENE_CLASS.new())
 end
 
 function love.update(dt)
@@ -57,7 +58,7 @@ end
 
 function love.draw()
     scene_manager.draw()
-    love.graphics.setColor(255, 255, 255)
+    love.graphics.setColor(1, 1, 1)
     love.graphics.setFont(FONTS.system)
     love.graphics.printf("FPS: " .. love.timer.getFPS(), 0, 0, love.graphics.getWidth(), "right")
 end

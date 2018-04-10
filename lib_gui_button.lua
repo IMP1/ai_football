@@ -40,12 +40,12 @@ function Button:draw()
     love.graphics.rectangle("fill", x, y, w, h, rx, ry)
 
     local border_colour = {unpack(self.style.border_colour)}
-    border_colour[4] = self.opacity
+    border_colour[4] = self.border_opacity or self.opacity
     love.graphics.setColor(border_colour)
     love.graphics.rectangle("line", x, y, w, h, rx, ry)
 
     local text_colour = {unpack(self.style.text_colour)}
-    text_colour[4] = self.opacity
+    text_colour[4] = self.text_opacity or self.opacity
     love.graphics.setColor(text_colour)
     love.graphics.setFont(self.style.font)
     love.graphics.printf(self.text(), x, y + 8, w, "center")

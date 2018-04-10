@@ -27,13 +27,12 @@ function colour_util.toRGB(h, s, l, a)
     end
     m1 = l * 2 - m2
     return
-        255 * h2rgb(m1, m2, h + 1/3),
-        255 * h2rgb(m1, m2, h),
-        255 * h2rgb(m1, m2, h - 1/3)
+        h2rgb(m1, m2, h + 1/3),
+        h2rgb(m1, m2, h),
+        h2rgb(m1, m2, h - 1/3)
 end
 
 function colour_util.toHSL(r, g, b, a)
-    r, g, b = r / 255, g / 255, b / 255
 
     local max, min = math.max(r, g, b), math.min(r, g, b)
     local h, s, l
@@ -68,7 +67,7 @@ function colour_util.textColour(backgroundColour)
     if l > 0.5 then
         return 0, 0, 0
     else
-        return 255, 255, 255
+        return 1, 1, 1
     end
 end
 

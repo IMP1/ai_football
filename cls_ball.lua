@@ -48,9 +48,9 @@ function Ball:draw(ox, oy, rotation, scale)
     -- @TODO: take offset (ox and oy) into account
     local x, y, z = unpack(self.position:rotate(0, 0, -rotation).data)
 
-    love.graphics.setColor(0, 0, 0, 128)
+    love.graphics.setColor(0, 0, 0, 0.5)
     love.graphics.circle("fill", x * scale, y * scale, self.size * scale)
-    love.graphics.setColor(255, 255, 255)
+    love.graphics.setColor(1, 1, 1)
     love.graphics.circle("fill", 
         (x - z * math.cos(rotation)) * scale, (y - z * math.sin(rotation)) * scale, 
         self.size * scale)

@@ -74,7 +74,7 @@ function gui_manager.register(id, elements)
     scenes[id] = {
         id       = id,
         offset   = {0, 0},
-        opacity  = 255,
+        opacity  = 1,
         visible  = false,
         active   = false,
         elements = elements,
@@ -142,7 +142,7 @@ function gui_manager.draw()
     for _, scene in pairs(visible_scenes()) do
         love.graphics.push()
         love.graphics.translate(unpack(scene.offset))
-        love.graphics.setColor(255, 255, 255, scene.opacity)
+        love.graphics.setColor(1, 1, 1, scene.opacity)
         for _, element in pairs(scene.elements) do
             element.opacity = scene.opacity
             element:draw()

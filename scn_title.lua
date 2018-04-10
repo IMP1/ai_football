@@ -17,8 +17,8 @@ function Title.new()
 end
 
 function Title:load()
-    local team1 = require 'cls_team'.new("Ridge Rovers United FC", nil, {0, 96, 255})
-    local team2 = require 'cls_team'.new("Firelight United", nil, {255, 0, 0})
+    local team1 = require 'cls_team'.new("Ridge Rovers United FC", nil, {0, 0.375, 1})
+    local team2 = require 'cls_team'.new("Firelight United", nil, {1, 0, 0})
     self.background_game = Game.new(team1, team2)
     self.background_game:load()
 
@@ -33,7 +33,7 @@ function Title:load()
             if gui_manager.is_enabled('singleplayer') then return end
             gui_manager.close('multiplayer')
             gui_manager.show('singleplayer')
-            gui_manager.transitions.fade('singleplayer', 0, 255, 0.2, function() gui_manager.enable('singleplayer') end)
+            gui_manager.transitions.fade('singleplayer', 0, 1, 0.2, function() gui_manager.enable('singleplayer') end)
             gui_manager.transitions.swipe('singleplayer', {0, 0}, {64, 0}, 0.2)
             gui_manager.transitions.swipe('title', {0, 0}, {-64, 0}, 0.2)
         end,
@@ -48,7 +48,7 @@ function Title:load()
                 if gui_manager.is_enabled('multiplayer') then return end
                 gui_manager.close('singleplayer')
                 gui_manager.show('multiplayer')
-                gui_manager.transitions.fade('multiplayer', 0, 255, 0.2, function() gui_manager.enable('multiplayer') end)
+                gui_manager.transitions.fade('multiplayer', 0, 1, 0.2, function() gui_manager.enable('multiplayer') end)
                 gui_manager.transitions.swipe('multiplayer', {0, 0}, {64, 0}, 0.2)
                 gui_manager.transitions.swipe('title', {0, 0}, {-64, 0}, 0.2)
             else
@@ -106,7 +106,7 @@ function Title:load()
         size     = {128, 32},
         text     = T"Training Grounds",
         onclick  = function()
-            scene_manager.setScene(require('scn_training').new())
+            scene_manager.pushScene(require('scn_training').new())
         end,
     }))
     j = j + 64
@@ -116,7 +116,7 @@ function Title:load()
         text     = T"Back",
         onclick  = function()
             gui_manager.disable('singleplayer')
-            gui_manager.transitions.fade('singleplayer', 255, 0, 0.2, function() gui_manager.hide('singleplayer') end)
+            gui_manager.transitions.fade('singleplayer', 1, 0, 0.2, function() gui_manager.hide('singleplayer') end)
             gui_manager.transitions.swipe('singleplayer', {64, 0}, {0, 0}, 0.2)
             gui_manager.transitions.swipe('title', {-64, 0}, {0, 0}, 0.2)
         end,
@@ -166,7 +166,7 @@ function Title:load()
 end 
 
 function Title:update(dt)
-    self.background_game:update(dt)
+    self:backgroundUpdate(dt)
     gui_manager.update(dt)
 end
 
@@ -175,12 +175,20 @@ function Title:mouseReleased(mx, my)
 end
 
 function Title:draw()
-    love.graphics.setColor(255, 255, 255)
-    self.background_game:draw()
-    love.graphics.setColor(0, 0, 0, 128)
-    love.graphics.rectangle("fill", 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
-    love.graphics.setColor(255, 255, 255)
+    self:backgroundDraw()
+    love.graphics.setColor(1, 1, 1)
     gui_manager.draw()
+end
+
+function Title:backgroundUpdate(dt)
+    self.background_game:update(dt)
+end
+
+function Title:backgroundDraw()
+    love.graphics.setColor(1, 1, 1)
+    self.background_game:draw()
+    love.graphics.setColor(0, 0, 0, 0.5)
+    love.graphics.rectangle("fill", 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
 end
 
 return Title

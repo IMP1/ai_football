@@ -1,13 +1,13 @@
 local Element = {}
 Element.__index = Element
 
-local DEFAULT_STYLE = {
-    background_colour = {255, 255, 255},
+Element.DEFAULT_STYLE = {
+    background_colour = {1, 1, 1},
     text_colour       = {0, 0, 0},
     border_colour     = {0, 0, 0},
     border_radius     = {4, 4},
     padding           = {4, 4, 4, 4},
-    font              = FONTS.game_text,
+    font              = love.graphics.getFont(),
 }
 
 function Element.new(options)
@@ -17,15 +17,19 @@ function Element.new(options)
     self.position = options.position or {0, 0}
     self.size     = options.size     or {256, 256}
     self.style    = options.style    or {}
-    self.opacity  = options.opacity  or 255
+    self.opacity  = options.opacity  or 1
 
-    for k, v in pairs(DEFAULT_STYLE) do
+    self:setDefaultStyle()
+    
+    return self
+end
+
+function Element:setDefaultStyle()
+    for k, v in pairs(Element.DEFAULT_STYLE) do
         if not self.style[k] then
             self.style[k] = v
         end
     end
-
-    return self
 end
 
 function Element:isMouseOver(mx, my)

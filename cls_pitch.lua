@@ -14,8 +14,8 @@ function Pitch.new()
     self.friction       = 0.5
     self.air_resistance = 0.1
 
-    self.background_colour = {64, 192, 64}
-    self.line_colour       = {192, 255, 192}
+    self.background_colour = {0.25, 0.75, 0.25}
+    self.line_colour       = {0.75, 1, 0.75}
 
     -- All following lengths are in metres, and are according to the BBC website
     -- http://news.bbc.co.uk/sport1/hi/football/rules_and_equipment/4200666.stm
