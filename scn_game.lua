@@ -164,24 +164,28 @@ function Game:tick()
 end
 
 function Game:draw()
+
+    local scale = 7
+    local rotation = math.pi / 2
+
     local w = love.graphics.getWidth()
     local h = love.graphics.getHeight()
     self.camera:set()
-    self.pitch:draw(0, 0, math.pi / 2, 7)
+    self.pitch:draw(0, 0, rotation, scale)
     love.graphics.push()
-    love.graphics.rotate(math.pi / 2)
-    love.graphics.scale(7)
-    for i, team in pairs(self.teams) do
-        love.graphics.setColor(team.home_colour)
-        local y = self.pitch.pitch_width * ((i-1)*2-1) / 3
-        love.graphics.line(y-4, -10 * self.directions[i], y, 10 * self.directions[i])
-        love.graphics.line(y+4, -10 * self.directions[i], y, 10 * self.directions[i])
-    end
+    love.graphics.rotate(rotation)
+    love.graphics.scale(scale)
+    -- for i, team in pairs(self.teams) do
+        -- love.graphics.setColor(team.home_colour)
+        -- local y = self.pitch.pitch_width * ((i-1)*2-1) / 3
+        -- love.graphics.line(y-4, -10 * self.directions[i], y, 10 * self.directions[i])
+        -- love.graphics.line(y+4, -10 * self.directions[i], y, 10 * self.directions[i])
+    -- end
     love.graphics.pop()
     for _, player in pairs(self.players) do
-        player:draw(0, 0, math.pi / 2, 7)
+        player:draw(0, 0, rotation, scale)
     end
-    self.ball:draw(0, 0, math.pi / 2, 7)
+    self.ball:draw(0, 0, rotation, scale)
     self.camera:unset()
 
     love.graphics.print(tostring(self.ball.position), 0, 0)
