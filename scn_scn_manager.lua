@@ -108,13 +108,13 @@ end
 
 
 function SceneManager.draw()
-    if current_scene and current_scene.draw then
-        current_scene:draw()
-    end
     for _, scene in pairs(scene_stack) do
         if scene and scene.backgroundDraw then
             scene:backgroundDraw()
         end
+    end
+    if current_scene and current_scene.draw then
+        current_scene:draw()
     end
 end
 
