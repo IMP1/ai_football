@@ -1,5 +1,16 @@
 local gui_manager = {}
 
+function gui_manager.hook()
+    for event_name, func in pairs(love.handlers) do
+        love.handlers[event_name] = function(...)
+            func(...)
+            if gui_manager[event_name] then
+                gui_manager[event_name](...)
+            end
+        end
+    end
+end
+
 local scenes = {}
 local transitions = {}
 
@@ -124,6 +135,7 @@ function gui_manager.is_enabled(id)
 end
 
 function gui_manager.update(dt)
+    local mx, my = love.mouse.getPosition()
     for _, scene in pairs(scenes) do
         local updated_transition = false
         for transisition_type, transition in pairs(transitions[scene.id]) do
@@ -132,7 +144,7 @@ function gui_manager.update(dt)
         end
         if scene.active and not updated_transition then
             for _, element in pairs(scene.elements) do
-                element:update(dt)
+                element:update(dt, mx, my)
             end
         end
     end
@@ -144,15 +156,17 @@ function gui_manager.draw()
         love.graphics.translate(unpack(scene.offset))
         love.graphics.setColor(1, 1, 1, scene.opacity)
         for _, element in pairs(scene.elements) do
-            element.opacity = scene.opacity
+            local element_opacity = element.opacity
+            element.opacity = element.opacity * scene.opacity
             element:draw()
+            element.opacity = element_opacity
         end
         love.graphics.pop()
     end
 end
 
 
-function gui_manager.mousePressed(mx, my, key)
+function gui_manager.mousepressed(mx, my, key)
     for _, scene in pairs(active_scenes()) do
         local ox, oy = unpack(scene.offset)
         for _, element in pairs(scene.elements) do
@@ -161,7 +175,7 @@ function gui_manager.mousePressed(mx, my, key)
     end
 end
 
-function gui_manager.mouseReleased(mx, my, key)
+function gui_manager.mousereleased(mx, my, key)
     for _, scene in pairs(active_scenes()) do
         local ox, oy = unpack(scene.offset)
         for _, element in pairs(scene.elements) do
@@ -170,7 +184,7 @@ function gui_manager.mouseReleased(mx, my, key)
     end
 end 
 
-function gui_manager.mouseScrolled(mx, my, dx, dy)
+function gui_manager.wheelmoved(mx, my, dx, dy)
     for _, scene in pairs(active_scenes()) do
         local ox, oy = unpack(scene.offset)
         for _, element in pairs(scene.elements) do
@@ -179,15 +193,15 @@ function gui_manager.mouseScrolled(mx, my, dx, dy)
     end
 end 
 
-function gui_manager.keyPressed(key)
+function gui_manager.keypressed(key, is_repeat)
     for _, scene in pairs(active_scenes()) do
         for _, element in pairs(scene.elements) do
-            element:keyPressed(key)
+            element:keyPressed(key, is_repeat)
         end
     end
 end
 
-function gui_manager.keyReleased(key)
+function gui_manager.keyreleased(key)
     for _, scene in pairs(active_scenes()) do
         for _, element in pairs(scene.elements) do
             element:keyReleased(key)
@@ -195,7 +209,7 @@ function gui_manager.keyReleased(key)
     end
 end
 
-function gui_manager.keyTyped(key)
+function gui_manager.textinput(key)
     for _, scene in pairs(active_scenes()) do
         for _, element in pairs(scene.elements) do
             element:keyTyped(key)

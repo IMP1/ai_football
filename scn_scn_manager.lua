@@ -1,5 +1,16 @@
 local SceneManager = {}
 
+function SceneManager.hook()
+    for event_name, func in pairs(love.handlers) do
+        love.handlers[event_name] = function(...)
+            func(...)
+            if SceneManager[event_name] then
+                SceneManager[event_name](...)
+            end
+        end
+    end
+end
+
 local current_scene = nil
 local scene_stack = {}
 
@@ -44,7 +55,7 @@ function SceneManager.keypressed(key, is_repeat)
         current_scene:keyPressed(key, is_repeat)
     end
     for _, scene in pairs(scene_stack) do
-        if scene and scene.backgroundKeypressed then
+        if scene and scene.backgroundKeypressed and scene ~= current_scene then
             scene:backgroundKeyPressed(key, is_repeat)
         end
     end
@@ -55,7 +66,7 @@ function SceneManager.textinput(text)
         current_scene:keyTyped(text)
     end
     for _, scene in pairs(scene_stack) do
-        if scene and scene.backgroundKeyTyped then
+        if scene and scene.backgroundKeyTyped and scene ~= current_scene then
             scene:backgroundKeyTyped(text)
         end
     end
@@ -66,7 +77,7 @@ function SceneManager.mousepressed(mx, my, key)
         current_scene:mousePressed(mx, my, key)
     end
     for _, scene in pairs(scene_stack) do
-        if scene and scene.backgroundMousePressed then
+        if scene and scene.backgroundMousePressed and scene ~= current_scene then
             scene:backgroundMousePressed(mx, my, key)
         end
     end
@@ -77,18 +88,18 @@ function SceneManager.mousereleased(mx, my, key)
         current_scene:mouseReleased(mx, my, key)
     end
     for _, scene in pairs(scene_stack) do
-        if scene and scene.backgroundMouseReleased then
+        if scene and scene.backgroundMouseReleased and scene ~= current_scene then
             scene:backgroundMouseReleased(mx, my, key)
         end
     end
 end
 
-function SceneManager.mousescrolled(mx, my, dx, dy)
+function SceneManager.wheelmoved(mx, my, dx, dy)
     if current_scene and current_scene.mouseScrolled then
         current_scene:mouseScrolled(mx, my, dxm, dy)
     end
     for _, scene in pairs(scene_stack) do
-        if scene and scene.backgroundMouseScrolled then
+        if scene and scene.backgroundMouseScrolled and scene ~= current_scene then
             scene:backgroundMouseScrolled(mx, my, dxm, dy)
         end
     end
@@ -100,7 +111,7 @@ function SceneManager.update(dt)
         current_scene:update(dt, mx, my)
     end
     for _, scene in pairs(scene_stack) do
-        if scene and scene.backgroundUpdate then
+        if scene and scene.backgroundUpdate and scene ~= current_scene then
             scene:backgroundUpdate(dt, mx, my)
         end
     end
@@ -109,7 +120,7 @@ end
 
 function SceneManager.draw()
     for _, scene in pairs(scene_stack) do
-        if scene and scene.backgroundDraw then
+        if scene and scene.backgroundDraw and scene ~= current_scene then
             scene:backgroundDraw()
         end
     end
