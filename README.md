@@ -34,9 +34,3 @@ from Jack and the Beanstalk: [Fe Fi Fo Fum](https://en.wikipedia.org/wiki/Fee-fi
 I'm not very good at making things look good, but when I do, this is where I 
 will show it off to the world.
 
-## Credits
-
-**Graphics/Fonts**
-
-  * PT Sans Web
-
