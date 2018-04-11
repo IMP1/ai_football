@@ -167,17 +167,11 @@ end
 
 function Title:update(dt)
     self:backgroundUpdate(dt)
-    gui_manager.update(dt)
-end
-
-function Title:mouseReleased(mx, my)
-    gui_manager.mouseReleased(mx, my)
 end
 
 function Title:draw()
     self:backgroundDraw()
     love.graphics.setColor(1, 1, 1)
-    gui_manager.draw()
 end
 
 function Title:backgroundUpdate(dt)

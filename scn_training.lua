@@ -1,7 +1,10 @@
 local gui_manager = require 'lib_gui_manager'
-local List = require 'lib_gui_scroll_list'
-local Button = require 'lib_gui_button'
-local Text = require 'lib_gui_text'
+
+local List          = require 'lib_gui_scroll_list'
+local Button        = require 'lib_gui_button'
+local Text          = require 'lib_gui_text'
+local TextInput     = require 'lib_gui_text_input'
+local ColourPalette = require 'lib_gui_colour_palette'
 
 local Scene = require 'scn_base'
 
@@ -27,36 +30,42 @@ function Training:load()
     local w = 192
     table.insert(root, Button.new({
         position = {cx - w/2, 128},
-        size     = {192, 32},
+        size     = {w, 32},
         text     = T"Create New Team",
+        onclick  = function()
+            gui_manager.close('team_list')
+            gui_manager.open('new_team')
+        end,
     }))
     table.insert(root, Text.new({
         position = {cx - w/2, 224},
-        size     = {192, 32},
+        size     = {w, 32},
         text     = T"My Teams",
     }))
     table.insert(root, List.new({
         position = {cx - w/2, 256},
-        size     = {192, 128},
+        size     = {w, 128},
         items    = team_list,
     }))
 
+    local new_team = {}
+    table.insert(new_team, Text.new({
+        position = {cx-w/2, 224},
+        size     = {w, 32},
+        text     = T"New Team",    
+    }))
+    table.insert(new_team, ColourPalette.new({
+        position = {cx - w/2, 256},
+        size     = {w, w},
+    }))
 
     gui_manager.register('team_list', root)
+    gui_manager.register('new_team', new_team)
     gui_manager.open('team_list')
-end
-
-function Training:update(dt)
-    gui_manager.update(dt)
-end
-
-function Training:mouseScrolled(mx, my, dx, dy)
-    gui_manager.mouseScrolled(mx, my, dx, dy)
 end
 
 function Training:draw()
     love.graphics.setColor(1, 1, 1)
-    gui_manager.draw()
 end
 
 return Training
