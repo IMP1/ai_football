@@ -53,10 +53,11 @@ function Text:draw()
     love.graphics.rectangle("line", x, y, w, h, rx, ry)
 
     local text_colour = {unpack(self.style.text_colour)}
+    local align = self.align[1]
     text_colour[4] = self.text_opacity or self.opacity
     love.graphics.setColor(text_colour)
     love.graphics.setFont(self.style.font)
-    love.graphics.printf(self.text(), x, y + 8, w, "center")
+    love.graphics.printf(self.text(), x, y + 8, w, align)
 end
 
 return Text

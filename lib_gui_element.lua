@@ -16,8 +16,11 @@ function Element.new(options)
 
     self.position = options.position or {0, 0}
     self.size     = options.size     or {256, 256}
+    self.align    = options.align    or {"center", "top"}
     self.style    = options.style    or {}
     self.opacity  = options.opacity  or 1
+    
+    self.focus    = false
 
     self:setDefaultStyle()
     
