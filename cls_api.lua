@@ -18,7 +18,7 @@ function api.new_ball(ball_obj)
     b.velocity   = ball_obj.linear_velocity
     
      -- @TODO
-    b.is_in_play = nil
+    b.is_in_play = ball_obj.is_in_play
 
     return b
 end
@@ -56,7 +56,8 @@ function api.new_player(player_obj, controllable)
 end
 
 
-function this_player:shout(command)
+function this_player:shout(command, recipient)
+    api.keys[self]:shout(api.game_object, command, recipient)
 end
 
 function this_player:kick(direction, force, curve)

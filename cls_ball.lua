@@ -14,6 +14,8 @@ function Ball.new(x, y)
     self.spin = 0
     self.size = 0.8 -- meters
 
+    self.is_in_play = true
+
     return self
 end
 
@@ -54,8 +56,6 @@ function Ball:draw(ox, oy, rotation, scale)
     love.graphics.circle("fill", 
         (x - z * math.cos(rotation)) * scale, (y - z * math.sin(rotation)) * scale, 
         self.size * scale)
-    
-    -- @TODO: test the ball's shadow.
 end
 
 return Ball
