@@ -59,21 +59,21 @@ function Player:moveTowards(position)
     self.linear_velocity = (position - self.position):normalise() * self.stats.speed
 end
 
-function Player:interrupt(command)
+function Player:interrupt(game, command)
     if self.ai.interrupt then
-        self.ai.interrupt(self, command, game)
+        self.ai.interrupt(self, game, command)
     end
 end
 
-function Player:shout(command, recipient)
+function Player:shout(game, command, recipient)
     if recipient and recipient.team == self.team then
         print("Shouting '" .. command .. "' at " .. recipient.name)
-        recipient:interrupt(interrupt_index)
+        recipient:interrupt(game, command)
     else
         for _, player in pairs(self.team.players) do
             if player.team == team then
                 print("Shouting '" .. team.interrupts[interrupt_index] .. "' at the team")
-                player:interrupt(interrupt_index)
+                player:interrupt(game, command)
             end
         end
     end
