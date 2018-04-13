@@ -14,7 +14,44 @@ local function h2rgb(m1, m2, h)
     end
 end
 
-function colour_util.toRGB(h, s, l, a)
+function colour_util.fromHexString(hex_string)
+    local r, g, b
+    if #hex_string == 6 then
+        r = hex_string:sub(1, 2)
+        g = hex_string:sub(3, 4)
+        b = hex_string:sub(5, 6)
+    elseif #hex_string == 3 then
+        r = hex_string:sub(1, 1)
+        g = hex_string:sub(2, 2)
+        b = hex_string:sub(3, 3)
+    else
+        error("Invalid Hexadecimal colour: " .. tostring(hex_string))
+    end
+    return tonumber("0x" .. r) / 255, 
+           tonumber("0x" .. g) / 255, 
+           tonumber("0x" .. b) / 255
+end
+
+function colour_util.toHexString(r, g, b, a)
+    -- @TODO: do some rounding
+    local hex = ""
+    hex = hex .. string.format("%02x", r * 255)
+    hex = hex .. string.format("%02x", g * 255)
+    hex = hex .. string.format("%02x", b * 255)
+    if a then hex = hex .. string.format("%02x", a * 255) end
+    return hex
+end
+
+function colour_util.toRgbString(r, g, b, a)
+    local rgb = ""
+    rgb = rgb .. string.format("%d, ", r * 255)
+    rgb = rgb .. string.format("%d, ", g * 255)
+    rgb = rgb .. string.format("%d",   b * 255)
+    if a then rgb = rgb .. string.format(", %d", a * 255) end
+    return rgb
+end
+
+function colour_util.hsl_to_rgb(h, s, l)
     h = h % 360
     s = math.max(0, math.min(s, 1))
     l = math.max(0, math.min(l, 1))
@@ -32,7 +69,7 @@ function colour_util.toRGB(h, s, l, a)
         h2rgb(m1, m2, h - 1/3)
 end
 
-function colour_util.toHSL(r, g, b, a)
+function colour_util.rgb_to_hsl(r, g, b)
 
     local max, min = math.max(r, g, b), math.min(r, g, b)
     local h, s, l
@@ -61,9 +98,56 @@ function colour_util.toHSL(r, g, b, a)
     return h, s, l, a or 1
 end
 
+function colour_util.rgb_to_hsv(r, g, b)
+    local k = 0
+    if g < b then
+        g, b = b, g
+        k = -1
+    end
+    if r < g then
+        r, g = g, r
+        k = -1 / 6 - k
+    end
+    local chroma = r - math.min(g, b)
+
+    local h = math.abs(k + (g - b) / (6 * chroma + 1E-20))
+    local s = chroma / (r + 1E-20)
+    local v = r;
+
+    return h, s, v
+end
+
+function colour_util.hsv_to_rgb(h, s, v)
+    local r, g, b
+
+    local i = math.floor(h * 6);
+    local f = h * 6 - i;
+    local p = v * (1 - s);
+    local q = v * (1 - f * s);
+    local t = v * (1 - (1 - f) * s);
+
+    i = i % 6
+
+    if i == 0 then
+        r, g, b = v, t, p
+    elseif i == 1 then
+        r, g, b = q, v, p
+    elseif i == 2 then
+        r, g, b = p, v, t
+    elseif i == 3 then
+        r, g, b = p, q, v
+    elseif i == 4 then
+        r, g, b = t, p, v
+    elseif i == 5 then
+        r, g, b = v, p, q
+    end
+
+    return r, g, b, a
+end
+
 function colour_util.textColour(backgroundColour)
     local r, g, b = unpack(backgroundColour)
-    local h, s, l = colour_util.toHSL(r, g, b)
+    local h, s, l = colour_util.rgb_to_hsl(r, g, b)
     if l > 0.5 then
         return 0, 0, 0
     else
@@ -72,3 +156,4 @@ function colour_util.textColour(backgroundColour)
 end
 
 return colour_util
+
