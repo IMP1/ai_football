@@ -1,4 +1,4 @@
-local Element = require 'lib_gui_element'
+local Element = require 'gui_element'
 
 local Slider = {}
 setmetatable(Slider, Element)
@@ -16,6 +16,7 @@ function Slider.new(options)
     self.direction      = options.direction      or "horizontal"
     self.snapping       = options.snapping       or nil
     self.selection_size = options.selection_size or 1
+    self.onchange       = options.onchange       or nil
 
     return self
 end
@@ -45,6 +46,7 @@ function Slider:mouseReleased(mx, my)
         else
             error(invalid_direction_message(self.direction))
         end
+        if self.onchange then self.onchange() end
     end
 end
 

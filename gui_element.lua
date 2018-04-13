@@ -20,7 +20,9 @@ function Element.new(options)
     self.style    = options.style    or {}
     self.opacity  = options.opacity  or 1
     
+    self.enabled  = true
     self.focus    = false
+    self.invalid  = false
 
     self:setDefaultStyle()
     

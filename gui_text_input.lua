@@ -1,4 +1,4 @@
-local Element = require 'lib_gui_element'
+local Element = require 'gui_element'
 
 local TextInput = {}
 setmetatable(TextInput, Element)
@@ -12,6 +12,7 @@ function TextInput.new(options)
 
     self.placeholder = options.placeholder or nil
     self.flash_speed = options.flash_speed or 0.5
+    self.focus       = options.autofocus   or false
 
     self.value = ""
     self.text  = {}
@@ -32,6 +33,7 @@ function TextInput:mouseReleased(mx, my)
 end
 
 function TextInput:keyPressed(key, is_repeat)
+    if not self.focus then return end
     -- @SEE: https://love2d.org/wiki/love.textinput
     if key == "backspace" then
         if self.index > 0 and #self.text > 0 then
@@ -59,6 +61,8 @@ function TextInput:keyPressed(key, is_repeat)
 end
 
 function TextInput:keyTyped(text)
+    if not self.focus then return end
+    
     for c in text:gmatch(".") do
         table.insert(self.text, self.index + 1, c)
         self.index = self.index + 1

@@ -1,4 +1,4 @@
-local Element = require 'lib_gui_element'
+local Element = require 'gui_element'
 
 local ScrollList = {}
 setmetatable(ScrollList, Element)

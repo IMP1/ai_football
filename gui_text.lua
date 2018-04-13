@@ -1,4 +1,4 @@
-local Element = require 'lib_gui_element'
+local Element = require 'gui_element'
 
 local Text = {}
 setmetatable(Text, Element)
@@ -9,7 +9,7 @@ local DEFAULT_STYLE = {
     text_colour       = {0, 0, 0},
     border_colour     = {0, 0, 0},
     border_radius     = {4, 4},
-    padding           = {4, 4, 4, 4},
+    padding           = {0, 0, 0, 0},
     font              = FONTS.game_text,
 }
 
@@ -54,10 +54,19 @@ function Text:draw()
 
     local text_colour = {unpack(self.style.text_colour)}
     local align = self.align[1]
+    local font = self.style.font
+    local px, py, pright, pbottom = unpack(self.style.padding)
+
+    if self.align[2] == "middle" then
+        py = (h - ch) / 2
+    elseif self.align[2] == "bottom" then
+        py = h - ch - pbottom
+    end -- @TODO: copy this over to all other elements
+
     text_colour[4] = self.text_opacity or self.opacity
     love.graphics.setColor(text_colour)
-    love.graphics.setFont(self.style.font)
-    love.graphics.printf(self.text(), x, y + 8, w, align)
+    love.graphics.setFont(font)
+    love.graphics.printf(self.text(), x + px, y + py, w, align)
 end
 
 return Text

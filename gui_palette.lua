@@ -1,4 +1,4 @@
-local Element = require 'lib_gui_element'
+local Element = require 'gui_element'
 
 local Palette = {}
 setmetatable(Palette, Element)
@@ -11,6 +11,7 @@ function Palette.new(options)
     self.value          = options.value          or {0, 0}
     self.snapping       = options.snapping       or nil
     self.selection_size = options.selection_size or 4
+    self.onchange       = options.onchange       or nil
 
     return self
 end
@@ -33,6 +34,7 @@ function Palette:mouseReleased(mx, my)
         local x = mx / self.size[1]
         local y = my / self.size[2]
         self.value = {x, y}
+        if self.onchange then self.onchange() end
     end
 end
 
