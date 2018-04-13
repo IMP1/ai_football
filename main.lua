@@ -1,7 +1,16 @@
--- @TODO: update tlo library to latest version.
+
+-- global requires
+local Vector3 = require 'lib_vec3'
+vec3 = Vector3.new
 
 local tlo = require 'lib_tlo'
 T = tlo.deferredLocalise
+-- @TODO: update tlo library to latest version.
+
+math.signum = math.signum or function(x)
+    return x>0 and 1 or x<0 and -1 or 0
+end
+
 
 FONTS = {
     system     = love.graphics.getFont(),
@@ -18,18 +27,27 @@ DEFAULT_THEME = { -- @TODO: have more than one theme?
 
 local INITIAL_SCENE_CLASS = require 'scn_title'
 local scene_manager = require 'scn_scn_manager'
-local gui_manager   = require 'lib_gui_manager'
-local gui_element   = require 'lib_gui_element'
+local gui_manager   = require 'gui_gui_manager'
+local gui_element   = require 'gui_element'
 
+local function load_user_profile()
 
--- global requires
-local Vector3 = require 'lib_vec3'
-vec3 = Vector3.new
+end
+
+local function save_user_profile()
+
+end
 
 function love.load()
     gui_element.DEFAULT_STYLE.font = FONTS.game_text
-    tlo.settings.onMissingLanguageFile = tlo.actions.IGNORE
+
+    tlo.settings.onMissingLanguageFile   = tlo.actions.IGNORE
+    tlo.settings.addMissingLanguageFiles = true
+
+    tlo.settings.addMissingLocalisations = true
+
     tlo.setLanguage("en-UK")
+
     love.graphics.setFont(FONTS.game_title)
     love.graphics.setBackgroundColor(DEFAULT_THEME.void)
 
@@ -54,5 +72,6 @@ end
 
 function love.quit()
     -- @TODO: save teams and managers and data and stuff.
+    save_user_profile()
     print("Thanks for playing!")
 end

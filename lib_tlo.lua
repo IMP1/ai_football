@@ -36,13 +36,13 @@ tlo.actions = {
 
 tlo.settings = {
     -- BLANK, ERROR, IGNORE, NIL
-    onMissingLocalisation = tlo.actions.IGNORE,
+    onMissingLocalisation   = tlo.actions.IGNORE,
     addMissingLocalisations = true,
     -- BLANK, ERROR, IGNORE, NIL
-    onUnsetLanguage       = tlo.actions.ERROR,
+    onUnsetLanguage         = tlo.actions.ERROR,
     -- ERROR, IGNORE
-    onMissingLanguageFile = tlo.actions.ERROR,
-    addMissingLanguageFiles = true,
+    onMissingLanguageFile   = tlo.actions.ERROR,
+    addMissingLanguageFiles = false,
 }
 
 local currentLanguage = nil
