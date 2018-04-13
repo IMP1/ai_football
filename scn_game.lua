@@ -128,14 +128,15 @@ end
 
 function Game:interrupt(interrupt_index, team)
     if not team.interrupts[interrupt_index] then return end
+    local shout = team.interrupts[interrupt_index]
     if self.interrupt_player and self.interrupt_player.team == team then
-        print("Shouting '" .. team.interrupts[interrupt_index] .. "' at " .. self.interrupt_player.name)
-        self.interrupt_player:interrupt(interrupt_index)
+        print("Shouting '" .. shout .. "' at " .. self.interrupt_player.name)
+        self.interrupt_player:interrupt(self, shout)
     else
         for _, player in pairs(self.players) do
             if player.team == team then
-                print("Shouting '" .. team.interrupts[interrupt_index] .. "' at the team")
-                player:interrupt(interrupt_index)
+                print("Shouting '" .. shout .. "' at the team")
+                player:interrupt(self, shout)
             end
         end
     end
