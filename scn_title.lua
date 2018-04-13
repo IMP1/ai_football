@@ -1,10 +1,10 @@
 local Scene = require 'scn_base'
 local Game  = require 'scn_game'
 
-local gui_manager   = require 'lib_gui_manager'
+local gui_manager   = require 'gui_gui_manager'
 local scene_manager = require 'scn_scn_manager'
 
-local Button = require 'lib_gui_button'
+local Button = require 'gui_button'
 
 local Title = {}
 setmetatable(Title, Scene)
