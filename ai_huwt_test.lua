@@ -23,7 +23,7 @@ function ai.start_position(self, game)
     end
 end
 
-function ai.interrupt(self, command, game)
+function ai.interrupt(self, game, command)
 end
 
 function ai.tick(self, game)
