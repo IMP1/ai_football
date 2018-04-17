@@ -159,6 +159,7 @@ function Game:update(dt)
 end
 
 function Game:tick()
+    -- @TODO: Have this be safer. Make a sandbox and run the ai in that?
     for _, player in pairs(self.players) do
         player.ai.tick(Api.new_player(player, true), Api.new_game(self))
     end
