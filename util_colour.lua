@@ -147,8 +147,8 @@ end
 
 function colour_util.textColour(backgroundColour)
     local r, g, b = unpack(backgroundColour)
-    local h, s, l = colour_util.rgb_to_hsl(r, g, b)
-    if l > 0.5 then
+    local h, s, v = colour_util.rgb_to_hsv(r, g, b)
+    if v > 0.5 then
         return 0, 0, 0
     else
         return 1, 1, 1
