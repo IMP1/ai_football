@@ -11,13 +11,15 @@ math.signum = math.signum or function(x)
     return x>0 and 1 or x<0 and -1 or 0
 end
 
+player_data = {}
 
 FONTS = {
     system     = love.graphics.getFont(),
     game_title = love.graphics.newFont("res_PT_Sans-Web-Bold.ttf", 18),
     game_text  = love.graphics.newFont("res_PT_Sans-Web-Bold.ttf", 12),
 }
-DEFAULT_THEME = { -- @TODO: have more than one theme?
+-- @TODO: have this as a local variable, and just set values of the gui elements in main?
+DEFAULT_THEME = {
     void       = {0, 0, 0}, 
     background = {0.875, 0.875, 1},
     border     = {0.5, 0.5, 0.5},
@@ -25,13 +27,29 @@ DEFAULT_THEME = { -- @TODO: have more than one theme?
     stripe2    = {0.75, 0.75, 0.75},
 }
 
+local SAVE_DATA_FILENAME = "save.dat"
+
 local INITIAL_SCENE_CLASS = require 'scn_title'
+local Manager = require 'cls_manager'
 local scene_manager = require 'scn_scn_manager'
 local gui_manager   = require 'gui_gui_manager'
 local gui_element   = require 'gui_element'
 
-local function load_user_profile()
 
+local function load_user_profile()
+    -- @TODO: decide on a better name for this variable
+    local player = {}
+    if love.filesystem.exists(SAVE_DATA_FILENAME) then
+        -- @TODO: load data from file.
+        -- @TODO: worry about data fucking shit up?
+        --        presumabley this will be a love.filesystem.load() or
+        --        a read followed by a string exec. This *should* just
+        --        be a table of simple values. So maybe a sandbox for this?
+    else
+        -- @TODO: generate default data.
+        player.manager = Manager.new("huwt", "Huw T")
+    end 
+    player_data = player
 end
 
 local function save_user_profile()
@@ -51,10 +69,11 @@ function love.load()
     love.graphics.setFont(FONTS.game_title)
     love.graphics.setBackgroundColor(DEFAULT_THEME.void)
 
-    scene_manager.setScene(INITIAL_SCENE_CLASS.new())
-
     scene_manager.hook()
     gui_manager.hook()
+
+    load_user_profile()
+    scene_manager.setScene(INITIAL_SCENE_CLASS.new())
 end
 
 function love.update(dt)
