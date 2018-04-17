@@ -30,6 +30,17 @@ function SceneManager.scene()
     return current_scene
 end
 
+function SceneManager.peekScene()
+    return scene_stack[#scene_stack]
+end
+
+function SceneManager.clearTo(new_scene)
+    while current_scene do
+        SceneManager.popScene()
+    end
+    SceneManager.pushScene(new_scene)
+end
+
 function SceneManager.setScene(new_scene)
     closeScene()
     current_scene = new_scene
@@ -116,7 +127,6 @@ function SceneManager.update(dt)
         end
     end
 end
-
 
 function SceneManager.draw()
     for _, scene in pairs(scene_stack) do
