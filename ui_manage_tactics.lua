@@ -12,6 +12,7 @@ return function(team)
         style = {
             font = FONTS.game_title,
             backgroundColor = team.home_colour,
+            textColor = {colour.textColour(team.home_colour)},
             borderRadius = {12, 12},
             padding = {16, 16, 16, 16}
         },
