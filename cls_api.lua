@@ -2,6 +2,16 @@ local api = {}
 
 api.keys = {}
 
+local function read_only_table(tbl)
+   return setmetatable({}, {
+     __index      = tbl,
+     __newindex   = function(tbl, key, value)
+                        -- silently fail
+                    end,
+     __metatable  = false
+   });
+end
+
 function api.new_manager(manager_obj)
     local m = {}
 
@@ -46,6 +56,8 @@ function api.new_player(player_obj, controllable)
     p.has_ball  = player_obj.has_ball
     p.stats     = player_obj.stats
     p.team      = api.new_team(player_obj.team)
+    p.memory    = read_only_table(player_obj.memory)
+
 
      -- @TODO
     p.is_contesting_ball = nil
@@ -55,6 +67,9 @@ function api.new_player(player_obj, controllable)
     return p
 end
 
+function this_player:remember(mnemonic, value)
+    api.keys[self].memory[mnemonic] = value
+end
 
 function this_player:shout(command, recipient)
     api.keys[self]:shout(api.game_object, command, recipient)
