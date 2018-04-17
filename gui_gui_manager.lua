@@ -34,8 +34,8 @@ local function visible_scenes()
     return result
 end
 
-local function add_transition(scene_id, transition_id, transition)
-    transitions[scene_id][transition_id] = transition
+local function add_transition(gui_id, transition_id, transition)
+    transitions[gui_id][transition_id] = transition
 end
 
 gui_manager.transitions = {
@@ -51,6 +51,7 @@ gui_manager.transitions = {
                 if post_action then
                     post_action()
                 end
+                return
             end
             local dx = dt * (pos_to[1] - pos_from[1]) / duration
             local dy = dt * (pos_to[2] - pos_from[2]) / duration
@@ -69,6 +70,7 @@ gui_manager.transitions = {
                 if post_action then
                     post_action()
                 end
+                return
             end
             local dx = dt * (fade_to - fade_from) / duration
             scenes[id].opacity = scenes[id].opacity + dx
@@ -76,7 +78,7 @@ gui_manager.transitions = {
     end
 }
 
-function gui_manager.reset()
+function gui_manager.clear()
     scenes = {}
     transitions = {}
 end
@@ -91,6 +93,19 @@ function gui_manager.register(id, elements)
         elements = elements,
     }
     transitions[id] = {}
+end
+
+function gui_manager.reset(id)
+    if scenes[id] then
+        transitions[id] = {}
+        scenes[id].offset  = {0, 0}
+        scenes[id].opacity = 1
+    end
+end
+
+function gui_manager.remove(id)
+    scenes[id] = nil
+    transitions[id] = nil
 end
 
 function gui_manager.switchTo(id)

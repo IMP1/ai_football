@@ -8,26 +8,61 @@ function ScrollList.new(options)
     local self = Element.new(options)
     setmetatable(self, ScrollList)
 
-    self.items        = options.items          or {}
-    self.scoll_offset = options.initial_scroll or {0, 0}
+    self.items         = options.items          or {}
+    self.scoll_offset  = options.initial_scroll or {0, 0}
+    self.onselect      = options.onselect       or nil
+    self.selected_item = nil
 
     return self
 end
 
-function ScrollList:draw()
+function ScrollList:mouseReleased(mx, my, key)
+    if self:isMouseOver(mx, my) then
+        print("mouse clicked")
+        local item = self:getItemAt(mx, my)
+        if item then
+            self:select(item)
+            self.selected_item = item
+        end
+    end
+end
+
+function ScrollList:select(item)
+    self.selected_item = item
+    if self.onselect then
+        self.onselect(item)
+    end
+end
+
+function ScrollList:getItemAt(mx, my)
+    local oy = self.scoll_offset[2]
+    local y = 0
+    for index, item in ipairs (self.items) do
+        local item_y = item.position[2]
+        local item_h = item.size[2]
+        -- @TODO: this might have to be -oy instead of +oy
+        if y + oy >= item_y and y + oy <= item_y + item_h then
+            return item, index
+        end
+    end
+    return nil
+end
+
+function ScrollList:drawContents()
     local x, y = unpack(self.position)
     local w, h = unpack(self.size)
 
-    local background_colour = {unpack(self.style.background_colour)}
-    background_colour[4] = self.background_opacity or self.opacity
-    love.graphics.setColor(background_colour)
-    love.graphics.rectangle("fill", x, y, w, h, 4, 4)
+    love.graphics.setColor(1, 1, 1)
+    love.graphics.push()
+    love.graphics.translate(x, y)
+    love.graphics.setScissor(x, y, w, h)
+    
+    for i, item in ipairs(self.items) do
+        item:draw()
+    end
 
-    local border_colour = {unpack(self.style.border_colour)}
-    border_colour[4] = self.opacity
-    love.graphics.setColor(border_colour)
-    love.graphics.rectangle("line", x, y, w, h, 4, 4)
-
+    love.graphics.setScissor()
+    love.graphics.pop()
     -- @TODO: draw contents, offset by scroll_offset, using a scissor.
 end
 
