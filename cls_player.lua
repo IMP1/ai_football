@@ -30,6 +30,7 @@ function Player.new(team, name, number, ai)
         speed = 5, -- m/s
         turn_speed = nil, -- r/s?
     }
+    self.memory = {}
     self.game_position_index = 1
 
     -- In-Game properties
