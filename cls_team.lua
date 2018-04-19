@@ -1,6 +1,9 @@
 local Team = {}
 Team.__index = Team
 
+local NAMES = {"Albert", "Bertha", "Charlie", "Douglas", "Erin", "Frances", "Gerrard", "Horace"}
+local name_index = 1
+
 function Team.new(name, manager, home_colour, away_colour)
     local self = {}
     setmetatable(self, Team)
@@ -34,11 +37,21 @@ function Team.new(name, manager, home_colour, away_colour)
         end
     end
     require = saved_require
-    self.available_players = {
-        (require 'cls_player').new(self, "A", 1, self.ais["test_gk"]),
-        (require 'cls_player').new(self, "B", 2, self.ais["test"]),
-        (require 'cls_player').new(self, "C", 3, self.ais["idle"]),
-    } -- @TODO: get from team management
+    -- @TODO: get from team management
+    self.available_players = {}
+    table.insert(self.available_players, 
+        (require 'cls_player').new(self, NAMES[name_index], 1, self.ais["test_gk"])
+    )
+    name_index = name_index + 1
+    table.insert(self.available_players, 
+        (require 'cls_player').new(self, NAMES[name_index], 2, self.ais["test"])
+    )
+    name_index = name_index + 1
+    table.insert(self.available_players, 
+        (require 'cls_player').new(self, NAMES[name_index], 3, self.ais["idle"])
+    )
+    name_index = name_index + 1
+  
     self.starting_players = {} -- @TODO: get from team management
     for _, player in pairs(self.available_players) do table.insert(self.starting_players, player) end
     self.interrupts = {
