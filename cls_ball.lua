@@ -11,7 +11,6 @@ function Ball.new(x, y)
     setmetatable(self, Ball)
 
     self.mass = 0.45 -- kg
-    self.spin = 0
     self.size = 0.8 -- meters
 
     self.is_in_play = true
@@ -53,9 +52,7 @@ function Ball:draw(ox, oy, rotation, scale)
     love.graphics.setColor(0, 0, 0, 0.5)
     love.graphics.circle("fill", x * scale, y * scale, self.size * scale)
     love.graphics.setColor(1, 1, 1)
-    love.graphics.circle("fill", 
-        (x - z * math.cos(rotation)) * scale, (y - z * math.sin(rotation)) * scale, 
-        self.size * scale)
+    love.graphics.circle("fill", x * scale, (y - z) * scale, self.size * scale)
 end
 
 return Ball
