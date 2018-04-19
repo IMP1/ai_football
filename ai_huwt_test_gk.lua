@@ -24,7 +24,7 @@ function ai.tick(self, game)
         if angle < math.pi / 2 or angle > 3 * math.pi / 2 then
             print("ball is coming towards goal")
         end
-        if (game.ball.position - goal_pos):magnitude() < 100 then
+        if (game.ball.position + goal_pos):magnitude() < 100 then
             -- @TODO: if ball is near then get in between it and goal
             local dir = (game.ball.position - goal_pos):normalise()
             local intercept = goal_pos + dir * 4
