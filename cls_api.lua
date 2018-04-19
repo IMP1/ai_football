@@ -79,9 +79,11 @@ function this_player:kick(direction, force, curve)
     if (api.keys[self].has_ball) then
     -- if (api.game_object.ball.position - self.position):magnitudeSquared() < 1 then
         -- @TODO: use curve
+        -- @TODO: limit the force somehow. players should have maximum force, i guess.
         api.game_object.ball:applyForce(direction:normalise() * force)
         print(self.name, self.team.name, "kicks the ball.")
         api.game_object:changeBallOwnership(nil)
+        api.game_object.last_player_to_kick = api.keys[self]
     end
 end
 
@@ -130,6 +132,13 @@ function api.new_team(team_obj)
         if team == team_obj then index = i end
     end
     t.attacking_direction = api.game_object.directions[index]
+    if index == 1 then
+        t.is_at_home = true
+    elseif index == 2 then
+        t.is_at_home = false
+    else
+        error("this team isn't even playing!")
+    end
 
     t.players = nil -- @TODO
     t.manager = nil -- @TODO
