@@ -3,7 +3,7 @@ local ai = {
     author = "Huw Taylor"
 }
 
-function ai.start_position(self, game)
+function ai.start_position(self, game, is_our_kickoff)
     local dir = -self.team.attacking_direction
     return vec3(0, dir * (0.5 * game.pitch.dimensions.pitch_size[1] - 1), 0)
 end

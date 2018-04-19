@@ -3,7 +3,7 @@ local ai = {
     author = "Huw Taylor"
 }
 
-function ai.start_position(self, game)
+function ai.start_position(self, game, is_our_kickoff)
     local dir = -self.team.attacking_direction
     if self.number == 1 then
         return vec3(4, dir * 10, 0), {1, 0, 0, 1}
