@@ -92,6 +92,7 @@ function Player:draw(ox, oy, rotation, scale)
     love.graphics.circle("fill", x * scale, y * scale, 1 * scale)
     love.graphics.setColor(colour.textColour(self.team.home_colour))
     love.graphics.printf(self.number, x * scale - 32, y * scale - 6, 64, "center")
+    love.graphics.printf(self.name, x * scale - 32, y * scale - 16, 64, "center")
 end
 
 return Player
