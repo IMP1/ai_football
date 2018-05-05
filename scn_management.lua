@@ -10,12 +10,13 @@ local Management = {}
 setmetatable(Management, Scene)
 Management.__index = Management
 
-function Management.new(team)
+function Management.new(team, return_scene)
     local self = Scene.new("management")
     setmetatable(self, Management)
 
     self.team = team
     self.pitch = Pitch.new()
+    self.return_scene = return_scene
 
     return self
 end
@@ -25,7 +26,7 @@ function Management:load()
         require('ui_manage_tactics')(self.team),
     }
     self.current_layout_index = 1
-end    
+end
 
 function Management:keypressed(key)
     -- @TODO: save the team with a keypress
