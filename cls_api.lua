@@ -75,6 +75,7 @@ function this_player:shout(command, recipient)
     api.keys[self]:shout(api.game_object, command, recipient)
 end
 
+-- @TODO: split this into various actions: pass, through_ball, cross, shoot, clear, etc.
 function this_player:kick(direction, force, curve)
     if (api.keys[self].has_ball) then
     -- if (api.game_object.ball.position - self.position):magnitudeSquared() < 1 then
