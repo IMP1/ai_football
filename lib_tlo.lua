@@ -1,5 +1,5 @@
 local tlo = {
-    _VERSION     = 'v0.0.1',
+    _VERSION     = 'v0.1.1',
     _DESCRIPTION = 'A Lua localisation library for LÖVE games',
     _URL         = '',
     _LICENSE     = [[
@@ -45,6 +45,38 @@ tlo.settings = {
     addMissingLanguageFiles = false,
 }
 
+local Localisation = {}
+Localisation.__index = Localisation
+
+function Localisation.new(text, language)
+    local self = {}
+    setmetatable(self, Localisation)
+    self.original_text = text
+    self.target_language = language or nil
+    return self
+end
+
+function Localisation:__tostring()
+    local translation
+    if self.target_language then
+        local lan = tlo.getLanguage()
+        tlo.setLanguage(self.target_language)
+        translation = tlo.translate_string(self.original_text)
+        tlo.setLanguage(lan)
+    else
+        translation = tlo.translate_string(self.original_text)
+    end
+    return translation
+end
+
+function Localisation:__call(language)
+    local lan = self.target_language
+    self.target_language = language
+    local translation = tostring(self)
+    self.target_language = lan
+    return translation
+end
+
 local currentLanguage = nil
 local languageFilesPath = "lang"
 local lookupTable = {}
@@ -63,7 +95,7 @@ local function addString(newString)
     end
 end
 
-function tlo.localise(string)
+function tlo.translate_string(string)
     if not currentLanguage then
         if tlo.settings.onUnsetLanguage == tlo.actions.RETURN_BLANK then
             return ""
@@ -94,9 +126,13 @@ function tlo.localise(string)
     end
 end
 
-function tlo.deferredLocalise(string)
+function tlo.localise(string, language)
+    return Localisation.new(string, language)
+end
+
+function tlo.deferredTranslate(string)
     return function()
-        return tlo.localise(string)
+        return tlo.translate_string(string)
     end
 end
 
