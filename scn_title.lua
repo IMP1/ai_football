@@ -112,7 +112,7 @@ end
 
 function Title:backgroundDraw()
     love.graphics.setColor(1, 1, 1)
-    -- self.background_game:draw()
+    self.background_game:draw()
     love.graphics.setColor(0, 0, 0, 0.6)
     love.graphics.rectangle("fill", 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
 end
