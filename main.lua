@@ -4,7 +4,7 @@ local Vector3 = require 'lib_vec3'
 vec3 = Vector3.new
 
 local tlo = require 'lib_tlo'
-T = tlo.deferredLocalise
+T = tlo.localise
 -- @TODO: update tlo library to latest version.
 
 math.signum = math.signum or function(x)
