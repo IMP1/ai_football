@@ -29,6 +29,16 @@ function Title:load()
     local j = 172
 
     table.insert(menu, Button.new({
+        position = {344, j - 64},
+        size     = {128, 32},
+        text     = T"AI Testing",
+        onclick  = function()
+            gui_manager.close(self.GUI_MENU_ID)
+            scn_manager.clearTo(require('scn_prog').new())
+        end,
+    }))
+
+    table.insert(menu, Button.new({
         position = {344, j},
         size     = {128, 32},
         text     = T"Singleplayer",
