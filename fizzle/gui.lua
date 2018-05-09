@@ -5,11 +5,10 @@ setmetatable(Container, lang.objects.Container)
 Container.__index = Container
 
 function Container.new(x, y, w, h, capacity, types)
-    local self = {}
+    local self = lang.objects.Container.new(capacity, unpack(types))
     setmetatable(self, Container)
     self.position  = {x, y}
     self.size      = {w, h}
-    self.container = lang.objects.Container.new(capacity, unpack(types))
     return self
 end
 
@@ -20,36 +19,41 @@ end
 
 
 local Component = {}
+setmetatable(Component, lang.objects.Component)
 Component.__index = Component
 
 function Component.new(x, y, w, h, name)
-    local self = {}
+    local self = lang.objects.Component.new(name)
     setmetatable(self, Component)
     self.position   = {x, y}
     self.size       = {w, h}
-    self.component  = lang.objects.Component.new(name)
     return self
+end
+
+-- @Override
+function Component:setContainer(x, y, w, h, name, limit, ...)
+    self.containers[name] = Container.new(x, y, w, h, limit, ...)
 end
 
 
 
 local gui = {}
 
-gui.elements = {
+gui.objects = {
     Container,
     Component,
 
+    Expression,
+    Value,
+    BinaryCondition,
+    VariableAccess,
+    
     Statement,
+    Block,
     IfStatement,
     IfElseStatement.
     DeclStatement,
-    Block,
     Programme,
-    
-    Expression,
-    Value,
-    VariableAccess,
-    BinaryCondition,
 }
 
 gui.if_then      = IfStatement.new

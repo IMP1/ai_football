@@ -69,6 +69,10 @@ function Component:is_a(Component_type)
     return false
 end
 
+function Component:setContainer(name, limit, ...)
+    self.containers[name] = Container.new(limit, ...)
+end
+
 function Component:add(container, child)
     if self.programme then
         child.programme = self.programme
@@ -139,8 +143,8 @@ BinaryCondition.Operation = {
 function BinaryCondition.new()
     local self = Expression.new("Condition")
     setmetatable(self, BinaryCondition)
-    self.containers['left_operand']  = Container.new(1, Expression)
-    self.containers['right_operand'] = Container.new(1, Expression)
+    self:setContainer('left_operand', 1, Expression)
+    self:setContainer('right_operand', 1, Expression)
     self.operation = BinaryCondition.Operation.EQUAL_TO
     return self
 end
@@ -180,7 +184,7 @@ end
 function VariableAccess.new(varname)
     local self = Expression.new("Variable")
     setmetatable(self, VariableAccess)
-    self.containers['name'] = Container.new(1, Value)
+    self:setContainer('name', 1, Value)
     local name = Value.new("string", 0, 0, 0, 0)
     name:set(varname)
     self.containers['name']:add(name)
@@ -223,7 +227,7 @@ end
 function Block.new()
     local self = Statement.new("Block")
     setmetatable(self, Block)
-    self.containers['children'] = Container.new(nil, Statement)
+    self:setContainer('children', nil, Statement)
     return self
 end
 
@@ -246,8 +250,8 @@ function IfStatement.new()
     local self = Statement.new("If")
     setmetatable(self, IfStatement)
 
-    self.containers['condition'] = Container.new(1, Statement)
-    self.containers['then']      = Container.new(1, Block)
+    self:setContainer('condition', 1, Statement)
+    self:setContainer('then', 1, Block)
 
     return self
 end
@@ -270,9 +274,9 @@ function IfElseStatement.new()
     local self = Statement.new("If")
     setmetatable(self, IfElseStatement)
 
-    self.containers['condition'] = Container.new(1, Expression)
-    self.containers['then']      = Container.new(1, Block)
-    self.containers['else']      = Container.new(1, Block)
+    self:setContainer('condition', 1, Expression)
+    self:setContainer('then', 1, Block)
+    self:setContainer('else', 1, Block)
 
     return self
 end
@@ -298,8 +302,8 @@ end
 function DeclStatement.new()
     local self = Statement.new("Declaration")
     setmetatable(self, DeclStatement)
-    self.containers['name']  = Container.new(1, Value)
-    self.containers['value'] = Container.new(1, Expression)
+    self:setContainer('name', 1, Value)
+    self:setContainer('value', 1, Expression)
     return self
 end
 
@@ -332,17 +336,17 @@ lang.objects = {
     Container,
     Component,
 
+    Expression,
+    Value,
+    BinaryCondition,
+    VariableAccess,
+    
     Statement,
     IfStatement,
     IfElseStatement.
     DeclStatement,
     Block,
     Programme,
-    
-    Expression,
-    Value,
-    VariableAccess,
-    BinaryCondition,
 }
 
 lang.if_then      = IfStatement.new
