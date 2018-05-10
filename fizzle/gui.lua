@@ -4,6 +4,12 @@ TODO:
   - Make a single visual component? That refers to a single language component.
   - Then subclass the visual component to deal with how it looks and behaves.
 
+
+  Statements    square
+  Expressions   rounded rectangles
+  Containers    depends on types it can take
+  Dropdowns     square
+
 --]]
 
 local lang = require 'lang'
@@ -31,10 +37,10 @@ local Container = {}
 setmetatable(Container, Object)
 Container.__index = Container
 
-function Container.new(x, y, w, h, capacity, types)
+function Container.new(x, y, w, h, capacity, type)
     local self = Object.new(x, y, w, h)
     setmetatable(self, Container)
-    self.component = lang.objects.Container.new(capacity, unpack(types))
+    self.component = lang.objects.Container.new(capacity, type)
     return self
 end
 
@@ -42,13 +48,20 @@ function Container:draw()
     -- @TODO: decide how things are drawn
     local x, y = unpack(self.position)
     local w, h = unpack(self.size)
+    local r = 0
+    if self.component.type == lang.objects.Expression then
+        r = 8
+    end
     love.graphics.setColor(1, 1, 1)
     love.graphics.rectangle("fill", x, y, w, h)
     love.graphics.setColor(0, 0, 0)
     love.graphics.rectangle("line", x, y, w, h)
+    -- Shadow
+    love.graphics.setColor(0, 0, 0, 0.3)
+    love.graphics.rectangle("fill", x, y, 2, h)
+    love.graphics.rectangle("fill", x, y, w, 2)
     -- @TODO: draw contents.
 end
-
 
 local Component = {}
 setmetatable(Component, Object)
@@ -63,15 +76,13 @@ function Component.new(x, y, w, h, name)
 end
 
 function Component:add(name, child)
+    self.containers[name]:add(child)
     self.containers[name].component:add(child.component)
 end
 
 function Component:draw()
     -- @STUB
 end
-
-
-
 
 local Expression = {}
 setmetatable(Expression, Object)
@@ -83,6 +94,22 @@ function Expression.new(x, y, w, h, name)
     self.component = lang.objects.Expression.new(name)
     return self
 end
+
+local Statement = {}
+setmetatable(Statement, Object)
+Statement.__index = Statement
+
+function Statement.new(x, y, w, h, name)
+    local self = Object.new(x, y, w, h)
+    setmetatable(self, Statement)
+    self.component = lang.objects.Statement.new(name)
+    return self
+end
+
+
+
+
+
 
 
 local gui = {}

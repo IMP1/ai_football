@@ -12,10 +12,10 @@ Container.__index = function(tbl, key)
     end
 end
 
-function Container.new(capacity, ...)
+function Container.new(capacity, type)
     local self = {}
     setmetatable(self, Container)
-    self.types    = {...}
+    self.type     = type
     self.max_size = capacity
     self.items    = {}
     return self
@@ -25,10 +25,8 @@ function Container:canTake(component)
     if self.max_size and (#self.items >= self.max_size) then
         return false
     end
-    for _, t in ipairs(self.types) do
-        if component:is_a(t) then
-            return true
-        end
+    if component:is_a(self.type) then
+        return true
     end
     return false
 end
@@ -69,7 +67,7 @@ function Component:is_a(Component_type)
     return false
 end
 
-function Component:setContainer(Container.new(name, container))
+function Component:setContainer(name, container)
     self.containers[name] = container
 end
 
